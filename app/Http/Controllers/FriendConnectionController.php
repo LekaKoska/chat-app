@@ -56,7 +56,7 @@ class FriendConnectionController extends Controller
         return view(view: 'friendship.incoming_request', data: compact('receiver'));
     }
 
-    public function respondRequest(Request $request, FriendConnectionModel $friendship, string $action): RedirectResponse
+    public function respondRequest(FriendConnectionModel $friendship, string $action): RedirectResponse
     {
         $this->authorize('handleRequest', $friendship);
 

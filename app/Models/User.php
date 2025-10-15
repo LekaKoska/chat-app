@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\FriendStatus;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -47,8 +48,24 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function friends(): HasMany
+    public function sendFriend(): BelongsToMany
     {
-        return $this->hasMany(related: FriendConnectionModel::class, foreignKey: 'sender_id', localKey: 'id');
+        return $this->belongsToMany(related: User::class, table: FriendConnectionModel::TABLE, foreignPivotKey: 'sender_id', relatedPivotKey: 'receiver_id')
+            ->withPivot(columns: 'status')
+            ->withTimestamps();
+    }
+
+    public function receiveFriend(): BelongsToMany
+    {
+        return $this->belongsToMany(related: User::class, table: FriendConnectionModel::TABLE, foreignPivotKey: 'receiver_id', relatedPivotKey: 'sender_id')
+            ->withPivot(columns: 'status')
+            ->withTimestamps();
+    }
+    public function getFriendsAttribute()
+    {
+        $sent = $this->sendFriend()->wherePivot(column: 'status', operator: FriendStatus::Accepted)->get();
+        $received = $this->receiveFriend()->wherePivot(column: 'status', operator: FriendStatus::Accepted)->get();
+
+        return $sent->merge($received);
     }
 }
