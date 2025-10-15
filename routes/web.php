@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FriendConnectionController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -36,6 +37,8 @@ Route::controller(FriendConnectionController::class)->middleware(['auth'])->pref
     Route::get('/incoming-request/{receiverId}', 'incomingRequest')->name('incoming');
     Route::patch('/respond-request/{friendship}/{action}', 'respondRequest')->name('respond');
 });
+
+Route::resource(name: 'posts', controller: PostController::class);
 
 
 require __DIR__.'/auth.php';
