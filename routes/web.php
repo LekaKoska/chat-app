@@ -27,15 +27,14 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     $request->fulfill();
     return redirect('/home');
 })->middleware(['auth', 'signed'])->name('verification.verify');
-Route::controller(FriendConnectionController::class)->middleware(['auth'])->prefix('friends')->group(function ()
+
+Route::controller(FriendConnectionController::class)->middleware(['auth'])->prefix('friends')->name('friends.request.')->group(function ()
 {
-    Route::get('/', 'request');
-    Route::post('/send-request/{receiverId}', 'sendRequest')->name('friends.request');
-    Route::get('/incoming-request/{receiverId}', 'incomingRequest')->name('friends.request.incoming');
-    Route::patch('/respond-request/{friendship}/{action}', 'respondRequest')->name('friends.request.respond');
+    Route::get('/', 'request')->name('show');
+    Route::post('/send-request/{receiverId}', 'sendRequest')->name('send');
+    Route::get('/incoming-request/{receiverId}', 'incomingRequest')->name('incoming');
+    Route::patch('/respond-request/{friendship}/{action}', 'respondRequest')->name('respond');
 });
-
-
 
 
 require __DIR__.'/auth.php';
