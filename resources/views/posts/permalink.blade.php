@@ -37,6 +37,12 @@
                 <p class="mt-2 text-gray-800 dark:text-gray-200 leading-relaxed">
                     {{ $post->content }}
                 </p>
+                @can('update', $post)
+                    <a href="{{ route('posts.edit', $post->id) }}"
+                       class="inline-block px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition">
+                        Edit
+                    </a>
+                @endcan
             </div>
         </div>
     </div>

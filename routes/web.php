@@ -38,7 +38,7 @@ Route::controller(FriendConnectionController::class)->middleware(['auth'])->pref
     Route::patch('/respond-request/{friendship}/{action}', 'respondRequest')->name('respond');
 });
 
-Route::resource(name: 'posts', controller: PostController::class);
+Route::resource(name: 'posts', controller: PostController::class)->middleware('auth');
 
 
 require __DIR__.'/auth.php';
