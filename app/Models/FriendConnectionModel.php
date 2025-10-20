@@ -12,7 +12,7 @@ class FriendConnectionModel extends Model
     protected $casts = [ 'status' => FriendStatus::class];
 
     protected $table = self::TABLE;
-    protected $fillable = ['sender_id', 'receiver_id'];
+    protected $fillable = ['sender_id', 'receiver_id', 'status'];
 
     public function sender(): BelongsTo
     {

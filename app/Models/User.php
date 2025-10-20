@@ -23,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'avatar'
     ];
 
     /**
@@ -67,5 +68,10 @@ class User extends Authenticatable implements MustVerifyEmail
         $received = $this->receiveFriend()->wherePivot(column: 'status', operator: FriendStatus::Accepted)->get();
 
         return $sent->merge($received);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(related: Post::class, foreignKey: 'user_id', localKey: 'id');
     }
 }
