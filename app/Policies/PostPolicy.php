@@ -20,4 +20,9 @@ class PostPolicy
     {
         return $post->status === PostStatus::Published;
     }
+
+    public function delete(User $user, Post $post): bool
+    {
+        return $user->id === $post->user_id;
+    }
 }

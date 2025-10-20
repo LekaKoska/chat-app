@@ -10,8 +10,14 @@
 
 <div class="max-w-2xl mx-auto px-4 space-y-6">
     <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">Community Feed</h1>
+    <div class="flex justify-end mb-6">
+        <a href="{{ route('posts.create') }}"
+           class="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition">
+            Add New Post
+        </a>
+    </div>
 
-    @forelse($posts as $post)
+@forelse($posts as $post)
         <a href="{{ route('posts.show', $post->id) }}" class="block hover:shadow-lg transition rounded-2xl">
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-2xl p-5 transition hover:shadow-md">
             <div class="flex items-start gap-4">
