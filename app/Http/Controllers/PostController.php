@@ -7,8 +7,8 @@ use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Intervention\Image\Colors\Rgb\Channels\Red;
 
 class PostController extends Controller
 {
@@ -19,6 +19,14 @@ class PostController extends Controller
             [
                 'posts' => Post::with(relations: 'ownerOfPosts')->where(column: 'status', operator: PostStatus::Published)->latest()->paginate(perPage: 10)
             ] );
+    }
+
+    public function search(Request $request): View
+    {
+       $posts =  Post::where('content', 'LIKE', "%{$request->get('search')}%")
+           ->orderBy('created_at','desc')
+           ->paginate(10);
+       return view(view: "posts.all", data: compact('posts'));
     }
     public function create(): View
     {
