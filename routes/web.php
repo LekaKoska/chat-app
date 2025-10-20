@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendConnectionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -41,6 +42,8 @@ Route::controller(FriendConnectionController::class)->middleware(['auth'])->pref
 });
 
 Route::resource(name: 'posts', controller: PostController::class)->middleware('auth');
+Route::get('search', [PostController::class, 'search'])->name('posts.search');
+Route::resource(name: 'comments', controller: CommentController::class)->middleware('auth');
 
 
 require __DIR__.'/auth.php';
