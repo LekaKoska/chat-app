@@ -25,7 +25,7 @@
                         <span class="text-gray-800 font-medium">{{ $user->name }}</span>
                     </div>
 
-                    <form action="{{ route('friends.request', ['receiverId' => $user->id]) }}" method="POST">
+                    <form action="{{ route('friends.request.send', ['receiverId' => $user->id]) }}" method="POST">
                         @csrf
                         <button
                             type="submit"

@@ -27,15 +27,17 @@ Route::get('/email/verify', function () {
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect('/home');
+    return redirect()->route('posts.index');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::controller(FriendConnectionController::class)->middleware(['auth'])->prefix('friends')->name('friends.request.')->group(function ()
 {
-    Route::get('/', 'request')->name('show');
+    Route::get('/', 'all')->name('index');
+    Route::get('/add-friends', 'request')->name('show');
     Route::post('/send-request/{receiverId}', 'sendRequest')->name('send');
-    Route::get('/incoming-request/{receiverId}', 'incomingRequest')->name('incoming');
+    Route::get('/incoming-request', 'incomingRequest')->name('incoming');
     Route::patch('/respond-request/{friendship}/{action}', 'respondRequest')->name('respond');
+    Route::delete('/delete/{friend}', 'deleteFriend')->name('remove');
 });
 
 Route::resource(name: 'posts', controller: PostController::class)->middleware('auth');
