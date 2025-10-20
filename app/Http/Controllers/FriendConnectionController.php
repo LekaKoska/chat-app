@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\FriendStatus;
 use App\Models\FriendConnectionModel;
+use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,6 +13,26 @@ use Illuminate\View\View;
 class FriendConnectionController extends Controller
 {
     use AuthorizesRequests;
+
+    public function all(): View
+    {
+        $friends = FriendConnectionModel::where(function ($query) {
+            $userId = auth()->id();
+            $query->where('sender_id', $userId)
+                ->orWhere('receiver_id', $userId);
+        })
+            ->where('status', FriendStatus::Accepted->value)
+            ->with(['sender', 'receiver'])
+            ->get();
+
+        $friendsList = $friends->map(function ($friend) {
+            return $friend->sender_id === auth()->id()
+                ? $friend->receiver
+                : $friend->sender;
+        });
+
+        return view('friendship.all_friends', data: ['friends' => $friendsList]);
+    }
 
     public function request(): View
     {
@@ -47,7 +68,6 @@ class FriendConnectionController extends Controller
 
         return redirect()->back()->with(key: 'success', value: 'Successfully sent request');
     }
-
     public function incomingRequest(): View
     {
         $receiver = FriendConnectionModel::where('receiver_id', auth()->id())
@@ -71,6 +91,12 @@ class FriendConnectionController extends Controller
 
         $friendship->update(['status' => $action]);
         return redirect()->back()->with(key: 'success', value: 'Friend request is successfully confirmed!');
+    }
+
+    public function deleteFriend(FriendConnectionModel $friend)
+    {
+        $friend->delete();
+        return redirect()->route('friends.request.index')->with(key: 'success', value: 'Deleted successfully');
     }
 
 }
