@@ -26,4 +26,9 @@ class Post extends Model
         return $this->hasMany(related: Comment::class, foreignKey: 'post_id', localKey: 'id');
     }
 
+    public function votes(): HasMany
+    {
+        return $this->hasMany(related: Vote::class, foreignKey: 'post_id', localKey: 'id');
+    }
+
 }

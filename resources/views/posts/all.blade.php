@@ -37,6 +37,30 @@
         <a href="{{ route('posts.show', $post->id) }}" class="block hover:shadow-lg transition rounded-2xl">
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-2xl p-5 transition hover:shadow-md">
             <div class="flex items-start gap-4">
+                <div class="flex flex-col items-center w-12 text-center select-none">
+                    <form method="POST" action="{{route('posts.upvote', $post->id)}}">
+                        @csrf
+                        <button type="submit"
+                                class="w-10 h-10 flex items-center justify-center rounded hover:bg-gray-200 transition-colors
+                {{ auth()->user() && $post->votes()->where('user_id', auth()->id())->where('vote', 1)->exists() ? 'text-green-500 font-bold' : 'text-gray-500' }}">
+                            ▲
+                        </button>
+                    </form>
+
+                    <div class="my-1 font-semibold text-gray-700">
+                        {{ $post->votes()->sum('vote') }}
+                    </div>
+
+                    <form method="POST" action="{{route('posts.downvote', $post->id)}}">
+                        @csrf
+                        <input type="hidden" name="vote" value="-1">
+                        <button type="submit"
+                                class="w-10 h-10 flex items-center justify-center rounded hover:bg-gray-200 transition-colors
+                {{ auth()->user() && $post->votes()->where('user_id', auth()->id())->where('vote', -1)->exists() ? 'text-red-500 font-bold' : 'text-gray-500' }}">
+                            ▼
+                        </button>
+                    </form>
+                </div>
 
                 <div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
                     <img
@@ -44,11 +68,8 @@
                                     ? asset('storage/images/avatars/' . $post->ownerOfPosts->avatar)
                                     : asset('default-avatar.png') }}"
                         alt="Avatar"
-                        class="w-full h-full object-cover"
-                    >
+                        class="w-full h-full object-cover">
                 </div>
-
-
                 <div class="flex-1">
                     <div class="flex items-center justify-between">
                         <h2 class="font-semibold text-gray-900 dark:text-gray-100">

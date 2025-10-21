@@ -4,6 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendConnectionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -43,6 +44,8 @@ Route::controller(FriendConnectionController::class)->middleware(['auth'])->pref
 
 Route::resource(name: 'posts', controller: PostController::class)->middleware('auth');
 Route::get('search', [PostController::class, 'search'])->name('posts.search');
+Route::post('posts/{post}/upvote', [PostController::class, 'upvote'])->name('posts.upvote');
+Route::post('posts/{post}/downvote', [PostController::class, 'downvote'])->name('posts.downvote');
 Route::resource(name: 'comments', controller: CommentController::class)->middleware('auth');
 
 

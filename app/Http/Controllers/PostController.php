@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\PostStatus;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
+use App\Models\Vote;
+use App\Traits\VoteTrait;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,14 +15,17 @@ use Illuminate\View\View;
 class PostController extends Controller
 {
     use AuthorizesRequests;
+    use VoteTrait;
     public function index(): View
     {
         return view(view: 'posts.all', data:
             [
-                'posts' => Post::with(relations: 'ownerOfPosts')->where(column: 'status', operator: PostStatus::Published)->latest()->paginate(perPage: 10)
-            ] );
+                'posts' => Post::with(relations: 'ownerOfPosts')
+                    ->where(column: 'status', operator: PostStatus::Published)
+                    ->latest()
+                    ->paginate(perPage: 10)
+            ]);
     }
-
     public function search(Request $request): View
     {
        $posts =  Post::where('content', 'LIKE', "%{$request->get('search')}%")
@@ -54,6 +59,16 @@ class PostController extends Controller
         $data = array_merge($request->validated(), ['user_id' => $request->user()->id]);
         $post->update($data);
         return redirect()->route('posts.index');
+    }
+    public function upvote(Post $post): RedirectResponse
+    {
+       $this->voting(modelWithRelation: $post->votes(), column: 'post_id',value: 1);
+        return redirect()->back();
+    }
+    public function downvote(Post $post): RedirectResponse
+    {
+        $this->voting(modelWithRelation: $post->votes(), column: 'post_id',value: -1);
+        return redirect()->back();
     }
     public function destroy(Post $post)
     {
