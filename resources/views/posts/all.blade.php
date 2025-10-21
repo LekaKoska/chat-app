@@ -10,11 +10,57 @@
 
 <div class="max-w-2xl mx-auto px-4 space-y-6">
     <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">Community Feed</h1>
+    <div class="mb-6">
+        <form action="{{ route('posts.search') }}" method="GET" class="flex items-center gap-2">
+            <input type="text"
+                   name="search"
+                   value="{{ request('search') }}"
+                   placeholder="Search discussion..."
+                   class="flex-1 px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+            >
 
-    @forelse($posts as $post)
+            <button type="submit"
+                    class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition">
+                Search
+            </button>
+        </form>
+    </div>
+
+    <div class="flex justify-end mb-6">
+        <a href="{{ route('posts.create') }}"
+           class="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition">
+            Add New Post
+        </a>
+    </div>
+
+@forelse($posts as $post)
         <a href="{{ route('posts.show', $post->id) }}" class="block hover:shadow-lg transition rounded-2xl">
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-2xl p-5 transition hover:shadow-md">
             <div class="flex items-start gap-4">
+                <div class="flex flex-col items-center w-12 text-center select-none">
+                    <form method="POST" action="{{route('posts.upvote', $post->id)}}">
+                        @csrf
+                        <button type="submit"
+                                class="w-10 h-10 flex items-center justify-center rounded hover:bg-gray-200 transition-colors
+                {{ auth()->user() && $post->votes()->where('user_id', auth()->id())->where('vote', 1)->exists() ? 'text-green-500 font-bold' : 'text-gray-500' }}">
+                            ▲
+                        </button>
+                    </form>
+
+                    <div class="my-1 font-semibold text-gray-700">
+                        {{ $post->votes()->sum('vote') }}
+                    </div>
+
+                    <form method="POST" action="{{route('posts.downvote', $post->id)}}">
+                        @csrf
+                        <input type="hidden" name="vote" value="-1">
+                        <button type="submit"
+                                class="w-10 h-10 flex items-center justify-center rounded hover:bg-gray-200 transition-colors
+                {{ auth()->user() && $post->votes()->where('user_id', auth()->id())->where('vote', -1)->exists() ? 'text-red-500 font-bold' : 'text-gray-500' }}">
+                            ▼
+                        </button>
+                    </form>
+                </div>
 
                 <div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
                     <img
@@ -22,11 +68,8 @@
                                     ? asset('storage/images/avatars/' . $post->ownerOfPosts->avatar)
                                     : asset('default-avatar.png') }}"
                         alt="Avatar"
-                        class="w-full h-full object-cover"
-                    >
+                        class="w-full h-full object-cover">
                 </div>
-
-
                 <div class="flex-1">
                     <div class="flex items-center justify-between">
                         <h2 class="font-semibold text-gray-900 dark:text-gray-100">

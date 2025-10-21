@@ -37,12 +37,28 @@
                 <p class="mt-2 text-gray-800 dark:text-gray-200 leading-relaxed">
                     {{ $post->content }}
                 </p>
-                @can('update', $post)
-                    <a href="{{ route('posts.edit', $post->id) }}"
-                       class="inline-block px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition">
-                        Edit
-                    </a>
-                @endcan
+                <div class="flex items-center gap-3 mt-4">
+                    @can('update', $post)
+                        <a href="{{ route('posts.edit', $post->id) }}"
+                           class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
+
+                            Edit
+                        </a>
+                    @endcan
+
+                    @can('delete', $post)
+                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST"
+                              onsubmit="return confirm('Are you sure you want to delete this post?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-400 focus:outline-none transition">
+                                Delete
+                            </button>
+                        </form>
+                    @endcan
+                </div>
+
             </div>
         </div>
     </div>
@@ -52,7 +68,7 @@
 
 
         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700 pb-3">
-            Comments ({{ $post->comments_count ?? 0 }})
+            Comments ({{ $post->comments()->count() ?? 0 }})
         </h3>
 
 
@@ -68,8 +84,9 @@
                 >
             </div>
 
-            <form class="flex-1">
+            <form class="flex-1" action="{{route('comments.store')}}" method="POST">
                 @csrf
+                <input type="hidden" name="post_id" value="{{$post->id}}">
                 <textarea
                     name="comment"
                     rows="2"
@@ -110,8 +127,28 @@
                             </span>
                         </div>
                         <p class="mt-1 text-gray-800 dark:text-gray-200 text-sm">
-                            {{ $comment->content }}
+                            {{ $comment->comment }}
                         </p>
+                        @can('update', $comment)
+                        <form action="{{ route('comments.edit', $comment->id) }}" method="GET" class="text-right mt-2">
+                            <button type="submit"
+                                    class="px-3 py-1 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
+                                Edit
+                            </button>
+                        </form>
+                        @endcan
+                        @can('delete', $comment)
+                            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="text-right mt-1">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        onclick="return confirm('Are you sure you want to delete this comment?')"
+                                        class="px-3 py-1 text-xs font-medium text-red-600 dark:text-red-400 hover:underline">
+                                    Delete
+                                </button>
+                            </form>
+                        @endcan
+
                     </div>
                 </div>
             @empty

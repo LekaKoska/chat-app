@@ -6,10 +6,10 @@ use App\Enums\PostStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Post extends Model
 {
-    /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory;
     const TABLE = 'posts';
 
@@ -20,6 +20,15 @@ class Post extends Model
     public function ownerOfPosts(): BelongsTo
     {
         return $this->belongsTo(related: User::class, foreignKey: 'user_id');
+    }
+    public function comments(): HasMany
+    {
+        return $this->hasMany(related: Comment::class, foreignKey: 'post_id', localKey: 'id');
+    }
+
+    public function votes(): HasMany
+    {
+        return $this->hasMany(related: Vote::class, foreignKey: 'post_id', localKey: 'id');
     }
 
 }
