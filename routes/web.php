@@ -4,7 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendConnectionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\VoteController;
+use App\Http\Controllers\ReplyCommentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -35,18 +35,25 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 Route::controller(FriendConnectionController::class)->middleware(['auth'])->prefix('friends')->name('friends.request.')->group(function ()
 {
     Route::get('/', 'all')->name('index');
-    Route::get('/add-friends', 'request')->name('show');
+    Route::get('/add', 'request')->name('show');
     Route::post('/send-request/{receiverId}', 'sendRequest')->name('send');
     Route::get('/incoming-request', 'incomingRequest')->name('incoming');
     Route::patch('/respond-request/{friendship}/{action}', 'respondRequest')->name('respond');
     Route::delete('/delete/{friend}', 'deleteFriend')->name('remove');
 });
 
-Route::resource(name: 'posts', controller: PostController::class)->middleware('auth');
-Route::get('search', [PostController::class, 'search'])->name('posts.search');
-Route::post('posts/{post}/upvote', [PostController::class, 'upvote'])->name('posts.upvote');
-Route::post('posts/{post}/downvote', [PostController::class, 'downvote'])->name('posts.downvote');
+Route::middleware('auth')->group(function ()
+{
+    Route::controller(PostController::class)->prefix('posts')->name('posts.')->group(function () {
+        Route::get('search', 'search')->name('search');
+        Route::post('{post}/upvote', 'upvote')->name('upvote');
+        Route::post('{post}/downvote', 'downvote')->name('downvote');
+    });
+    Route::resource(name: 'posts', controller:  PostController::class);
+});
+
 Route::resource(name: 'comments', controller: CommentController::class)->middleware('auth');
 
+Route::resource(name: 'reply', controller: ReplyCommentController::class)->middleware('auth');
 
 require __DIR__.'/auth.php';
