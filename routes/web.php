@@ -4,7 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendConnectionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\VoteController;
+use App\Http\Controllers\ReplyCommentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -42,8 +42,8 @@ Route::controller(FriendConnectionController::class)->middleware(['auth'])->pref
     Route::delete('/delete/{friend}', 'deleteFriend')->name('remove');
 });
 
-Route::middleware('auth')->group(function () {
-
+Route::middleware('auth')->group(function ()
+{
     Route::controller(PostController::class)->prefix('posts')->name('posts.')->group(function () {
         Route::get('search', 'search')->name('search');
         Route::post('{post}/upvote', 'upvote')->name('upvote');
@@ -54,5 +54,6 @@ Route::middleware('auth')->group(function () {
 
 Route::resource(name: 'comments', controller: CommentController::class)->middleware('auth');
 
+Route::resource(name: 'reply', controller: ReplyCommentController::class)->middleware('auth');
 
 require __DIR__.'/auth.php';
