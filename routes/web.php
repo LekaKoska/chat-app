@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendConnectionController;
+use App\Http\Controllers\MakeReadNotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyCommentController;
@@ -55,5 +56,7 @@ Route::middleware('auth')->group(function ()
 Route::resource(name: 'comments', controller: CommentController::class)->middleware('auth');
 
 Route::resource(name: 'reply', controller: ReplyCommentController::class)->middleware('auth');
+
+Route::put('/notification/{id}', [MakeReadNotificationController::class, 'read'])->name('notification.read');
 
 require __DIR__.'/auth.php';

@@ -6,7 +6,6 @@ use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -19,13 +18,11 @@ class CommentController extends Controller
         Comment::create($request->validated() + ['user_id' => Auth::id()]);
         return redirect()->back()->with(key: 'success', value: 'You add new comment');
     }
-
     public function edit(Comment $comment): View
     {
         $this->authorize(ability: 'update', arguments: $comment);
        return view(view: 'comments.edit', data: compact('comment'));
     }
-
     public function update(CommentRequest $request, Comment $comment): RedirectResponse
     {
         $this->authorize(ability: 'update', arguments: $comment);
