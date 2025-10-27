@@ -21,7 +21,7 @@ class VoteObserver
 
     public function updated(Vote $vote): void
     {
-        if ($vote->wasChanged(attributes: 'vote')) {
+        if ($vote->wasChanged('vote')) {
             $this->notifyPostOwner($vote);
         }
     }

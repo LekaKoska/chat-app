@@ -42,6 +42,7 @@
                                        class="block text-sm text-gray-800 dark:text-gray-200 hover:text-indigo-600">
                                         {{ $notification->data['notification'] }}
                                         <img src="{{"/storage/images/avatars/{$notification->data['sender']['avatar']}"}}" alt="">
+                                        {{$notification->markAsRead()}}
                                     </a>
 
                                     @if(!$notification->read_at)
