@@ -17,7 +17,7 @@ class Post extends Model
     protected $fillable = ['user_id', 'content', 'status'];
     protected $casts = ['status' => PostStatus::class];
 
-    public function ownerOfPosts(): BelongsTo
+    public function ownerOfPost(): BelongsTo
     {
         return $this->belongsTo(related: User::class, foreignKey: 'user_id');
     }

@@ -12,7 +12,7 @@ class PostObserver
     public function updated(Post $post): void
     {
         if ($post->wasChanged('status') && $post->status === PostStatus::Published) {
-            Mail::to(users: $post->ownerOfPosts->email)->send(new PostPublishedMail(post: $post));
+            Mail::to(users: $post->ownerOfPost->email)->send(new PostPublishedMail(post: $post));
         }
     }
 }

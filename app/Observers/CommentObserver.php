@@ -9,7 +9,7 @@ class CommentObserver
 {
     public function created(Comment $comment): void
     {
-        $postOwner =  $comment->posts->ownerOfPosts;
+        $postOwner =  $comment->posts->ownerOfPost;
 
         if($postOwner->id !== $comment->user_id)
         {

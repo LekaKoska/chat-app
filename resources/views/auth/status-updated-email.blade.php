@@ -14,7 +14,7 @@
 
     <div class="p-6">
         <p class="text-gray-800 mb-4">
-            Hi <span class="font-semibold">{{ $post->ownerOfPosts->name }}</span>,
+            Hi <span class="font-semibold">{{ $post->ownerOfPost->name }}</span>,
         </p>
 
         <p class="text-gray-700 mb-4">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $post->ownerOfPosts->name }}'s Post</title>
+    <title>{{ $post->ownerOfPost->name }}'s Post</title>
     @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 min-h-screen py-8">
@@ -16,8 +16,8 @@
 
             <div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
                 <img
-                    src="{{ $post->ownerOfPosts->avatar
-                                ? asset('storage/images/avatars/' . $post->ownerOfPosts->avatar)
+                    src="{{ $post->ownerOfPost->avatar
+                                ? asset('storage/images/avatars/' . $post->ownerOfPost->avatar)
                                 : asset('default-avatar.png') }}"
                     alt="Avatar"
                     class="w-full h-full object-cover"
@@ -27,7 +27,7 @@
             <div class="flex-1">
                 <div class="flex items-center justify-between">
                     <h2 class="font-semibold text-gray-900 dark:text-gray-100">
-                        {{ $post->ownerOfPosts->name }}
+                        {{ $post->ownerOfPost->name }}
                     </h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400">
                         {{ $post->created_at->diffForHumans() }}
