@@ -20,7 +20,7 @@ class PostController extends Controller
     {
         return view(view: 'posts.all', data:
             [
-                'posts' => Post::with(relations: 'ownerOfPosts')
+                'posts' => Post::with(relations: 'ownerOfPost')
                     ->where(column: 'status', operator: PostStatus::Published)
                     ->latest()
                     ->paginate(perPage: 10)

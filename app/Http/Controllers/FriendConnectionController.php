@@ -4,16 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Enums\FriendStatus;
 use App\Models\FriendConnectionModel;
-use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class FriendConnectionController extends Controller
 {
     use AuthorizesRequests;
-
     public function all(): View
     {
         $friends = FriendConnectionModel::where(function ($query) {
@@ -33,7 +30,6 @@ class FriendConnectionController extends Controller
 
         return view('friendship.all_friends', data: ['friends' => $friendsList]);
     }
-
     public function request(): View
     {
         return view(view: 'friendship.send_request');
@@ -75,7 +71,6 @@ class FriendConnectionController extends Controller
 
         return view(view: 'friendship.incoming_request', data: compact('receiver'));
     }
-
     public function respondRequest(FriendConnectionModel $friendship, string $action): RedirectResponse
     {
         $this->authorize('handleRequest', $friendship);
@@ -92,7 +87,6 @@ class FriendConnectionController extends Controller
         $friendship->update(['status' => $action]);
         return redirect()->back()->with(key: 'success', value: 'Friend request is successfully confirmed!');
     }
-
     public function deleteFriend(FriendConnectionModel $friend)
     {
         $friend->delete();

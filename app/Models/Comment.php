@@ -29,4 +29,9 @@ class Comment extends Model
         return $this->hasMany(related: ReplyComment::class, foreignKey: 'comment_id', localKey: 'id');
     }
 
+    public function posts(): BelongsTo
+    {
+        return $this->belongsTo(related: Post::class, foreignKey: 'post_id', ownerKey: 'id');
+    }
+
 }
