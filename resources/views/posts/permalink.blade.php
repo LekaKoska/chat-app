@@ -68,7 +68,7 @@
 
 
         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700 pb-3">
-            Comments ({{ $post->comments()->count() ?? 0 }})
+            Comments ({{ $post->comments_count ?? 0 }})
         </h3>
 
 

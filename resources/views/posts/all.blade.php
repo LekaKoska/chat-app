@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>All Posts</title>
     @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 min-h-screen py-8">
 
@@ -26,6 +27,37 @@
         </form>
     </div>
 
+    <div x-data="{ open: false }" class="relative mb-6">
+        <button @click="open = !open"
+                type="button"
+                class="w-40 flex justify-between items-center px-4 py-2 rounded-2xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-100 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none"
+                aria-haspopup="true" aria-expanded="open">
+            Sort by
+            <svg class="ml-2 h-5 w-5 text-gray-500 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </button>
+
+        <div x-show="open" @click.away="open = false" x-cloak
+             class="absolute mt-2 w-40 rounded-2xl shadow-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 z-20">
+            <a href="{{ route('posts.sort', array_merge(request()->query(), ['sort' => 'recent'])) }}"
+               @click="open = false"
+               class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-2xl {{ request('sort') === 'recent' ? 'font-bold bg-gray-100 dark:bg-gray-700' : '' }}">
+                Recent
+            </a>
+            <a href="{{ route('posts.sort', array_merge(request()->query(), ['sort' => 'likes'])) }}"
+               @click="open = false"
+               class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-2xl {{ request('sort') === 'likes' ? 'font-bold bg-gray-100 dark:bg-gray-700' : '' }}">
+                Most liked
+            </a>
+            <a href="{{ route('posts.sort', array_merge(request()->query(), ['sort' => 'comments'])) }}"
+               @click="open = false"
+               class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-2xl {{ request('sort') === 'comments' ? 'font-bold bg-gray-100 dark:bg-gray-700' : '' }}">
+                Most commented
+            </a>
+        </div>
+    </div>
     <div class="flex justify-end mb-6">
         <a href="{{ route('posts.create') }}"
            class="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition">
@@ -48,7 +80,7 @@
                     </form>
 
                     <div class="my-1 font-semibold text-gray-700">
-                        {{ $post->votes()->sum('vote') }}
+                        {{ request('sort') === 'likes' ? ($post->votes_count ?? 0) : ($post->votes_count ?? 0) }}
                     </div>
 
                     <form method="POST" action="{{route('posts.downvote', $post->id)}}">
@@ -93,7 +125,7 @@
 
 @if ($posts->hasPages())
     <div class="pt-6">
-        {{ $posts->links('pagination::tailwind') }}
+        {{ $posts->appends(request()->query())->links('pagination::tailwind') }}
     </div>
 @endif
 

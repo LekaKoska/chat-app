@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function ()
         Route::get('search', 'search')->name('search');
         Route::post('{post}/upvote', 'upvote')->name('upvote');
         Route::post('{post}/downvote', 'downvote')->name('downvote');
+        Route::get('sort-by', 'sort')->name('sort');
     });
     Route::resource(name: 'posts', controller:  PostController::class);
 });

@@ -20,6 +20,7 @@ class PostController extends Controller
         return view(view: 'posts.all', data:
             [
                 'posts' => Post::with(relations: 'ownerOfPost')
+                    ->withCount(relations: ['votes'])
                     ->where(column: 'status', operator: PostStatus::Published)
                     ->latest()
                     ->paginate(perPage: 10)
@@ -46,6 +47,7 @@ class PostController extends Controller
     }
     public function show(Post $post): View
     {
+        $post->loadCount(relations: 'comments');
         $this->authorize(ability: 'view', arguments: $post);
         return view(view: 'posts.permalink', data: compact('post'));
     }
@@ -75,5 +77,23 @@ class PostController extends Controller
         $this->authorize(ability: 'delete', arguments: $post);
         $post->delete();
         return redirect()->route('posts.index');
+    }
+    public function sort(Request $request): View
+    {
+        $sort = $request->get('sort');
+
+        $query = Post::with('ownerOfPost')
+            ->where('status', PostStatus::Published)
+            ->withCount(['comments'])
+            ->withCount(['votes as votes_count' => fn($q) => $q->where('vote', 1)]);
+
+        $query = match ($sort) {
+            'likes'    => $query->orderBy('votes_count', 'desc'),
+            'comments' => $query->orderBy('comments_count', 'desc'),
+            default    => $query->latest(),
+        };
+
+        $posts = $query->paginate(10)->withQueryString();
+        return view('posts.all', compact('posts'));
     }
 }
