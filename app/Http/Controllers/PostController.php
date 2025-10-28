@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use App\Enums\PostStatus;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use App\Models\Vote;
 use App\Traits\VoteTrait;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    use AuthorizesRequests;
-    use VoteTrait;
+    use AuthorizesRequests, VoteTrait;
     public function index(): View
     {
         return view(view: 'posts.all', data:
@@ -28,7 +27,8 @@ class PostController extends Controller
     }
     public function search(Request $request): View
     {
-       $posts =  Post::where('content', 'LIKE', "%{$request->get('search')}%")
+        $search = Str::slug($request->get('search'));
+        $posts =  Post::where('slug', 'LIKE', "%{$search}%")
            ->orderBy('created_at','desc')
            ->paginate(10);
        return view(view: "posts.all", data: compact('posts'));
