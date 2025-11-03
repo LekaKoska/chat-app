@@ -8,12 +8,17 @@ class MakeReadNotificationController extends Controller
 {
     public function read($id): RedirectResponse
     {
-        $notification = auth()->user()->unreadNotifications()->find($id);
-        if ($notification) {
-            $notification->markAsRead();
-
+        $notification = auth()->user()->notifications()->find($id);
+        if (!$notification) {
             return redirect()->back();
         }
-        return redirect()->back();
+        if (is_null($notification->read_at)) {
+            $notification->markAsRead();
+        }
+        $url = data_get($notification->data, 'url');
+        if (!$url) {
+            return redirect()->back();
+        }
+        return redirect()->to($url);
     }
 }

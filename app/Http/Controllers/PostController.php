@@ -5,22 +5,22 @@ namespace App\Http\Controllers;
 use App\Enums\PostStatus;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use App\Models\Vote;
 use App\Traits\VoteTrait;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    use AuthorizesRequests;
-    use VoteTrait;
+    use AuthorizesRequests, VoteTrait;
     public function index(): View
     {
         return view(view: 'posts.all', data:
             [
                 'posts' => Post::with(relations: 'ownerOfPost')
+                    ->withCount(relations: ['votes'])
                     ->where(column: 'status', operator: PostStatus::Published)
                     ->latest()
                     ->paginate(perPage: 10)
@@ -28,7 +28,8 @@ class PostController extends Controller
     }
     public function search(Request $request): View
     {
-       $posts =  Post::where('content', 'LIKE', "%{$request->get('search')}%")
+        $search = Str::slug($request->get('search'));
+        $posts =  Post::where('slug', 'LIKE', "%{$search}%")
            ->orderBy('created_at','desc')
            ->paginate(10);
        return view(view: "posts.all", data: compact('posts'));
@@ -46,6 +47,7 @@ class PostController extends Controller
     }
     public function show(Post $post): View
     {
+        $post->loadCount(relations: 'comments');
         $this->authorize(ability: 'view', arguments: $post);
         return view(view: 'posts.permalink', data: compact('post'));
     }
@@ -75,5 +77,23 @@ class PostController extends Controller
         $this->authorize(ability: 'delete', arguments: $post);
         $post->delete();
         return redirect()->route('posts.index');
+    }
+    public function sort(Request $request): View
+    {
+        $sort = $request->get('sort');
+
+        $query = Post::with('ownerOfPost')
+            ->where('status', PostStatus::Published)
+            ->withCount(['comments'])
+            ->withCount(['votes as votes_count' => fn($q) => $q->where('vote', 1)]);
+
+        $query = match ($sort) {
+            'likes'    => $query->orderBy('votes_count', 'desc'),
+            'comments' => $query->orderBy('comments_count', 'desc'),
+            default    => $query->latest(),
+        };
+
+        $posts = $query->paginate(10)->withQueryString();
+        return view('posts.all', compact('posts'));
     }
 }

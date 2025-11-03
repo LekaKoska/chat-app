@@ -6,6 +6,7 @@ use App\Http\Controllers\MakeReadNotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyCommentController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -22,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/avatar', [ProfileController::class, 'avatar'])->name('profile.avatar');
+    Route::get('/profile/info/{user:name}', [ProfileController::class, 'info'])->name('profile.info');
 });
 
 Route::get('/email/verify', function () {
@@ -49,6 +51,7 @@ Route::middleware('auth')->group(function ()
         Route::get('search', 'search')->name('search');
         Route::post('{post}/upvote', 'upvote')->name('upvote');
         Route::post('{post}/downvote', 'downvote')->name('downvote');
+        Route::get('sort-by', 'sort')->name('sort');
     });
     Route::resource(name: 'posts', controller:  PostController::class);
 });

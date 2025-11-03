@@ -12,8 +12,7 @@ use Illuminate\View\View;
 class CommentController extends Controller
 {
     use AuthorizesRequests;
-
-    public function store(CommentRequest $request)
+    public function store(CommentRequest $request): RedirectResponse
     {
         Comment::create($request->validated() + ['user_id' => Auth::id()]);
         return redirect()->back()->with(key: 'success', value: 'You add new comment');
@@ -29,7 +28,7 @@ class CommentController extends Controller
         $comment->update($request->validated());
         return redirect()->route(route: 'posts.show', parameters: $comment->post_id);
     }
-    public function destroy(Comment $comment)
+    public function destroy(Comment $comment): RedirectResponse
     {
         $this->authorize(ability: 'delete', arguments: $comment);
         $comment->delete();

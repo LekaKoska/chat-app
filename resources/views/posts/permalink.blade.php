@@ -15,13 +15,14 @@
         <div class="flex items-start gap-4">
 
             <div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-                <img
-                    src="{{ $post->ownerOfPost->avatar
+                <a href="{{route('profile.info', ['user' => $post->ownerOfPost->name])}}"><img
+                        src="{{ $post->ownerOfPost->avatar
                                 ? asset('storage/images/avatars/' . $post->ownerOfPost->avatar)
                                 : asset('default-avatar.png') }}"
-                    alt="Avatar"
-                    class="w-full h-full object-cover"
-                >
+                        alt="Avatar"
+                        class="w-full h-full object-cover"
+                    > </a>
+
             </div>
 
             <div class="flex-1">
@@ -68,7 +69,7 @@
 
 
         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700 pb-3">
-            Comments ({{ $post->comments()->count() ?? 0 }})
+            Comments ({{ $post->comments_count ?? 0 }})
         </h3>
 
 
