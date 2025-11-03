@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NewAvatarRequest;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use App\Traits\UploadImage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -63,5 +64,11 @@ class ProfileController extends Controller
         Auth::user()->update(['avatar' => $name]);
 
         return redirect()->back();
+    }
+
+    public function info(User $user)
+    {
+       $user->loadCount(['posts']);
+        return view('profile.info', compact('user'));
     }
 }
