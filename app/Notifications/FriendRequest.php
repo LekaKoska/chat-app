@@ -30,7 +30,7 @@ class FriendRequest extends Notification implements ShouldQueue
             'sender' => [
                 'id' => $this->sender->id,
                 'name' => $this->sender->name,
-                'avatar' => $this->user->avatar ?? null,
+                'avatar' => $this->sender->avatar ?? null,
             ]
         ];
     }

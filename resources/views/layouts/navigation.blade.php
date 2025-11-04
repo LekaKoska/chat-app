@@ -33,19 +33,15 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3c0 .386-.146.758-.405 1.05L4 17h5m6 0a3 3 0 01-6 0"/>
                             </svg>
-
-                            {{-- broj nepročitanih --}}
-                            @if(Auth::user()->unreadNotifications->count() > 0)
-                                <span
-                                    class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-xs rounded-full px-1.5">
-                    {{ Auth::user()->unreadNotifications->count() }}
-                </span>
-                            @endif
+                            @php $unread = Auth::user()->unreadNotifications->count(); @endphp
+                            <span id="notify-count" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-xs rounded-full px-1.5 {{ $unread ? '' : 'hidden' }}">
+                                {{ $unread }}
+                            </span>
                         </button>
                     </x-slot>
 
                     <x-slot name="content">
-                        <div class="overflow-y-auto max-h-96">
+                        <div class="overflow-y-auto max-h-96" id="notify-list">
                             @forelse(Auth::user()->unreadNotifications as $notification)
                                 <form id="notif-form-{{ $notification->id }}"
                                       action="{{ route('notification.read', $notification->id) }}"
@@ -53,7 +49,6 @@
                                       class="border-b border-gray-200 dark:border-gray-700">
                                     @csrf
                                     @method('PUT')
-                                    {{-- A link koji submituje formu --}}
                                     <a href="{{ $notification->data['url'] }}"
                                        onclick="event.preventDefault(); document.getElementById('notif-form-{{ $notification->id }}').submit();"
                                        class="block px-4 py-2 flex items-center space-x-3 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
@@ -66,14 +61,36 @@
                                     </a>
                                 </form>
                             @empty
-                                <div class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                                <div id="notif-empty" class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
                                     No notifications yet.
                                 </div>
                             @endforelse
                         </div>
                     </x-slot>
                 </x-dropdown>
+                <div x-data="{ open: false }" class="relative inline-block">
+                    <button @click="open = !open"
+                            class="relative p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800 dark:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M7 8h10M7 12h8m-6 8l-5-5H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-1l-5 5z" />
+                        </svg>
+                        @php $unreadMsg = 0; @endphp
+                        <span id="message-count" class="absolute -top-0.5 -right-0.5 bg-green-600 text-white text-xs rounded-full px-1.5 hidden">
+                            {{ $unreadMsg }}
+                        </span>
+                    </button>
+
+                    <div x-show="open"
+                         @click.outside="open = false"
+                         x-transition
+                         class="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 z-50">
+                        <div class="max-h-96 overflow-y-auto" id="message-list">
+                            <div id="message-empty" class="p-4 text-sm text-gray-500 dark:text-gray-400">No messages yet.</div>
+                        </div>
+                    </div>
+                </div>
 
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
