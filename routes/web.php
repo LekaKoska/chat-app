@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendConnectionController;
 use App\Http\Controllers\MakeReadNotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyCommentController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -61,5 +61,7 @@ Route::resource(name: 'comments', controller: CommentController::class)->middlew
 Route::resource(name: 'reply', controller: ReplyCommentController::class)->middleware('auth');
 
 Route::put('/notification/{id}', [MakeReadNotificationController::class, 'read'])->name('notification.read');
+Route::post('chat', [ChatController::class, 'sendMessage'])->middleware('auth')->name('chat');
+Route::get('message/{receiverId}', [ChatController::class, 'index'])->name('chat.form');
 
 require __DIR__.'/auth.php';
