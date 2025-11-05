@@ -13,13 +13,12 @@ Welcome to the repository for a modern, feature-rich chat and community platform
 ## 🛠️ Technology Stack
 
 | Category | Technology |
-| :--- | :--- | :--- |
-| **Backend** | Laravel 12 (PHP) | 
-| **Database** | MySQL |
-| **Real-time** | Laravel Reverb |
-| **Frontend** | Tailwind CSS, Alpine.js (Optional) |
-| **Queues** | Laravel Queue System | 
-
+| :--- | :--- |
+| Backend | Laravel 12 (PHP) |
+| Database | MySQL |
+| Real-time | Laravel Reverb |
+| Frontend | Tailwind CSS, Alpine.js (Optional) |
+| Queues | Laravel Queue System |
 
 ---
 
