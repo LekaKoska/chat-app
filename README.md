@@ -12,7 +12,7 @@ Welcome to the repository for a modern, feature-rich chat and community platform
 
 ## 🛠️ Technology Stack
 
-| Category | Technology 
+| Category | Technology |
 | :--- | :--- | :--- |
 | **Backend** | Laravel 12 (PHP) | 
 | **Database** | MySQL |
