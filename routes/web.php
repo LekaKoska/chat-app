@@ -7,6 +7,7 @@ use App\Http\Controllers\MakeReadNotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyCommentController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -67,6 +68,7 @@ Route::middleware(['auth'])->group(function ()
         Route::get('message/{receiverId}','index')->name('chat.form');
     });
 
+    Route::get('subscription/{user}', [SubscriptionController::class, 'subscription'])->name('subscription');
 });
 
 require __DIR__.'/auth.php';
