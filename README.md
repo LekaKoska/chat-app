@@ -14,12 +14,12 @@ Welcome to the repository for a modern, feature-rich chat and community platform
 
 | Category | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Backend** | Laravel 12 (PHP) | Core application framework. |
-| **Database** | MySQL / PostgreSQL | Data persistence. |
-| **Real-time** | Laravel Reverb | High-performance WebSocket server for real-time features. |
-| **Frontend** | Tailwind CSS, Alpine.js (Optional) | Styling and frontend interactivity. |
+| **Backend** | Laravel 12 (PHP) | 
+| **Database** | MySQL |
+| **Real-time** | Laravel Reverb |
+| **Frontend** | Tailwind CSS, Alpine.js (Optional) |
 | **Queues** | Laravel Queue System | Handling background jobs (e.g., email notification). |
-| **Environment** | Docker / Laravel Sail (Recommended) | Local development environment management. |
+
 
 ---
 
@@ -34,7 +34,7 @@ Ensure you have the following installed on your system:
 * PHP (8.2+)
 * Composer
 * Node.js & npm
-* Database server (e.g., MySQL, PostgreSQL)
+* MySQL
 
 ### 1. Installation
 
@@ -106,5 +106,5 @@ This starts the dedicated WebSocket server for real-time chat and notifications.
 ```bash
 php artisan reverb:start
 ```
-Once all four commands are running, your application should be fully operational and accessible at http://127.0.0.1:8000 (or the port specified by php artisan serve).
+Once all four commands are running, your application should be fully operational and accessible at http://127.0.0.1:8000 (or the port specified by ```php artisan serve```).
 
