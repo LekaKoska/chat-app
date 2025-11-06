@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
-    public function subscription(User $user): RedirectResponse
+    public function __invoke(User $user): RedirectResponse
     {
         $authUser = Auth::user();
         $user->with(['following', 'followers'])->withCount('followers');

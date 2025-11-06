@@ -68,7 +68,7 @@ Route::middleware(['auth'])->group(function ()
         Route::get('message/{receiverId}','index')->name('chat.form');
     });
 
-    Route::get('subscription/{user}', [SubscriptionController::class, 'subscription'])->name('subscription');
+    Route::get('subscription/{user}', SubscriptionController::class)->name('subscription');
 });
 
 require __DIR__.'/auth.php';
