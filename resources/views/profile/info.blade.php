@@ -21,7 +21,7 @@
 
             <div class="mt-8 grid grid-cols-3 text-center border-t border-gray-200 pt-6">
                 <div>
-                    <p class="text-xl font-bold text-gray-700">{{ $user->posts_count }}</p>
+                    <p class="text-xl font-bold text-gray-700">{{ $user->posts_count ?? 0 }}</p>
                     <p class="text-gray-500 text-sm">Posts</p>
                 </div>
                 <div>
