@@ -72,7 +72,7 @@ class PostController extends Controller
         $this->voting(modelWithRelation: $post->votes(), column: 'post_id',value: -1);
         return redirect()->back();
     }
-    public function destroy(Post $post)
+    public function destroy(Post $post): RedirectResponse
     {
         $this->authorize(ability: 'delete', arguments: $post);
         $post->delete();

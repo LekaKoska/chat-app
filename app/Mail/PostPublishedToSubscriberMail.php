@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PostPublishedMail extends Mailable implements ShouldQueue
+class PostPublishedToSubscriberMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -19,16 +19,18 @@ class PostPublishedMail extends Mailable implements ShouldQueue
     {
         $this->post = $post;
     }
+
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Post Published Mail',
+            subject: 'Post Published To Subscriber Mail',
         );
     }
+
     public function content(): Content
     {
         return new Content(
-            view: 'auth.status-updated-email',
+            view: 'mails.posts.published_subscriber',
             with: ['post' => $this->post]
         );
     }

@@ -6,6 +6,7 @@ use App\Enums\FriendStatus;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -52,5 +53,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function posts()
     {
         return $this->hasMany(related: Post::class, foreignKey: 'user_id', localKey: 'id');
+    }
+
+    public function followers(): BelongsToMany // Who follows this user
+    {
+        return $this->belongsToMany(related: User::class, table: 'subscriptions', foreignPivotKey: 'user_id', relatedPivotKey: 'subscriber_id')->withTimestamps();
+    }
+    public function following(): BelongsToMany // Who is being followed from this user
+    {
+        return $this->belongsToMany(related: User::class, table: 'subscriptions', foreignPivotKey: 'subscriber_id', relatedPivotKey: 'user_id')->withTimestamps();
     }
 }

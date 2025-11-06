@@ -1,4 +1,5 @@
-@php use Illuminate\Support\Facades\Auth; @endphp
+@php use App\Models\Subscription;use Illuminate\Support\Facades\Auth; @endphp
+
 <x-app-layout>
     <div class="min-h-screen bg-gray-100 flex justify-center py-10">
         <div class="bg-white shadow-lg rounded-2xl w-full max-w-2xl p-8">
@@ -20,25 +21,42 @@
 
             <div class="mt-8 grid grid-cols-3 text-center border-t border-gray-200 pt-6">
                 <div>
-                    <p class="text-xl font-bold text-gray-700">{{ $user->posts_count }}</p>
+                    <p class="text-xl font-bold text-gray-700">{{ $user->posts_count ?? 0 }}</p>
                     <p class="text-gray-500 text-sm">Posts</p>
                 </div>
                 <div>
-                    <p class="text-xl font-bold text-gray-700">{{ $user->friends->count() }}</p>
+                    <p class="text-xl font-bold text-gray-700">{{ $user->friends->count() ?? 0 }}</p>
                     <p class="text-gray-500 text-sm">Friends</p>
                 </div>
-            </div>
-                @unless($user->id === Auth::id())
-                <div class="mt-8 flex justify-center">
-                    <a href="{{route('chat.form', ['receiverId' => $user->id])}}"
-                       class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full text-sm font-medium shadow transition">
-                        Message {{ $user->name }}
-                    </a>
+                <div>
+                    <p class="text-xl font-bold text-gray-700">{{$user->followers->count() ?? 0}}</p>
+                    <p class="text-gray-500 text-sm">Subscribers</p>
                 </div>
-                @endunless
+            </div>
+            @unless($user->id === Auth::id())
+                <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
 
+                    <a href="{{ route('chat.form', ['receiverId' => $user->id]) }}"
+                       class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md transition transform hover:scale-105">
+                        💬 Message {{ $user->name }}
+                    </a>
+                    @php
+                        $isSubscribed = Auth::user()->following->contains($user->id);
+                    @endphp
+                @if(!$isSubscribed)
+                        <a href="{{route('subscription', ['user' => $user->id])}}"
+                           class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md transition transform hover:scale-105">
+                            ⭐ Subscribe to {{ $user->name }}
+                        </a>
+                    @else
+                        <a href="{{route('subscription', ['user' => $user->id])}}"
+                           class="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md transition transform hover:scale-105">
+                             Unsubscribe
+                        </a>
+                    @endif
 
-
+                </div>
+            @endunless
 
             @if($user->friends->count() > 0)
                 <div class="mt-10">
