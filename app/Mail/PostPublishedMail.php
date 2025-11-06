@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PostPublishedMail extends Mailable
+class PostPublishedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -19,20 +19,12 @@ class PostPublishedMail extends Mailable
     {
         $this->post = $post;
     }
-
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
             subject: 'Post Published Mail',
         );
     }
-
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
@@ -40,12 +32,6 @@ class PostPublishedMail extends Mailable
             with: ['post' => $this->post]
         );
     }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
     public function attachments(): array
     {
         return [];
