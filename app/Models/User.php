@@ -50,7 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $sent->merge($received);
     }
-    public function posts()
+    public function posts(): HasMany
     {
         return $this->hasMany(related: Post::class, foreignKey: 'user_id', localKey: 'id');
     }
