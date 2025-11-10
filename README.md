@@ -58,7 +58,7 @@ Ensure you have the following installed on your system:
         ```bash
         cp .env.example .env
         ```
-    * Open the `.env` file and configure your **Database credentials** and ensure the `BROADCAST_DRIVER` is set to `reverb` and `QUEUE_CONNECTION` is set to your desired driver (e.g., `database`, `redis`).
+    * Open the `.env` file and configure your **Database credentials** and ensure the `QUEUE_CONNECTION` is set to `database`.
 
 5.  **Generate Application Key:**
     ```bash
