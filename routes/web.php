@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendConnectionController;
@@ -14,6 +15,11 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+Route::controller(SocialiteController::class)->group(function ()
+{
+    Route::get('auth/{provider}/redirect','redirectTo')->name('auth.redirect');
+    Route::get('auth/{provider}/callback',  'handleCallback')->name('auth.callback');
+});
 
 Route::middleware(['auth'])->group(function ()
 {
