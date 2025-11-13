@@ -57,11 +57,6 @@
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
                 </a>
 
-                <a href="{{ route('auth.redirect', ProvidersEnum::Facebook) }}"
-                   class="p-2 border border-gray-300 rounded-full bg-white hover:bg-gray-100 transition duration-200 shadow-sm">
-                    <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" class="w-5 h-5">
-
-                </a>
             </div>
         </div>
 
