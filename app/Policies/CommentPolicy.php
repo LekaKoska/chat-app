@@ -9,6 +9,7 @@ use App\Traits\OwnsResource;
 class CommentPolicy
 {
     use OwnsResource;
+
     public function update(User $user, Comment $comment): bool
     {
         return $this->isOwner($user, $comment);

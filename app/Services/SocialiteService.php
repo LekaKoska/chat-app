@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+
 use App\Enums\Socialite\ProvidersEnum;
 use App\Models\User;
 use App\Models\UserProvider;
@@ -9,7 +10,6 @@ use Laravel\Socialite\Socialite;
 
 class SocialiteService
 {
-
     public function callback($provider): ?User
     {
         $data = Socialite::driver(driver: $provider)->user();

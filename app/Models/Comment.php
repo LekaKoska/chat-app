@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Comment extends Model
 {
     use HasFactory;
+
     const TABLE = 'comments';
     protected $table = self::TABLE;
 

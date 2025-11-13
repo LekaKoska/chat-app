@@ -17,6 +17,7 @@ class Vote extends Model
         'post_id',
         'vote'
     ];
+
     public function post(): BelongsTo
     {
         return $this->belongsTo(related: Post::class, foreignKey: 'post_id', ownerKey: 'id');

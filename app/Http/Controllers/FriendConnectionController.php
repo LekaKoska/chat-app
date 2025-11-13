@@ -11,6 +11,7 @@ use Illuminate\View\View;
 class FriendConnectionController extends Controller
 {
     use AuthorizesRequests;
+
     public function all(): View
     {
         $friends = FriendConnectionModel::where(function ($query) {
@@ -30,30 +31,30 @@ class FriendConnectionController extends Controller
 
         return view('friendship.all_friends', data: ['friends' => $friendsList]);
     }
+
     public function request(): View
     {
         return view(view: 'friendship.send_request');
     }
+
     public function sendRequest($receiverId): RedirectResponse
     {
         $senderId = \auth()->id();
-       if($senderId === $receiverId)
-       {
-           return redirect()->back()->with(key: 'error' , value: 'You cannot add yourself as friend');
-       }
+        if ($senderId === $receiverId) {
+            return redirect()->back()->with(key: 'error', value: 'You cannot add yourself as friend');
+        }
 
-       $exists = FriendConnectionModel::where(function ($q) use ($senderId, $receiverId)
-       {
-          $q->where('sender_id', $senderId)
-              ->where('receiver_id', $receiverId);
-       })
-           ->orWhere(function ($q) use ($senderId, $receiverId) {
-               $q->where('sender_id', $receiverId)
-                   ->where('receiver_id', $senderId);
-           })->exists();
+        $exists = FriendConnectionModel::where(function ($q) use ($senderId, $receiverId) {
+            $q->where('sender_id', $senderId)
+                ->where('receiver_id', $receiverId);
+        })
+            ->orWhere(function ($q) use ($senderId, $receiverId) {
+                $q->where('sender_id', $receiverId)
+                    ->where('receiver_id', $senderId);
+            })->exists();
 
-        if($exists) {
-            return redirect()->back()->with(key: 'error' , value: 'Friend request already exist!');
+        if ($exists) {
+            return redirect()->back()->with(key: 'error', value: 'Friend request already exist!');
         }
 
         FriendConnectionModel::create([
@@ -64,13 +65,15 @@ class FriendConnectionController extends Controller
 
         return redirect()->back()->with(key: 'success', value: 'Successfully sent request');
     }
+
     public function incomingRequest(): View
     {
         $receiver = FriendConnectionModel::where('receiver_id', auth()->id())
-           ->where('status', FriendStatus::Pending->value)->with('sender')->get();
+            ->where('status', FriendStatus::Pending->value)->with('sender')->get();
 
         return view(view: 'friendship.incoming_request', data: compact('receiver'));
     }
+
     public function respondRequest(FriendConnectionModel $friendship, string $action): RedirectResponse
     {
         $this->authorize('handleRequest', $friendship);
@@ -87,6 +90,7 @@ class FriendConnectionController extends Controller
         $friendship->update(['status' => $action]);
         return redirect()->back()->with(key: 'success', value: 'Friend request is successfully confirmed!');
     }
+
     public function deleteFriend(FriendConnectionModel $friend)
     {
         $friend->delete();

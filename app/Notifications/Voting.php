@@ -12,6 +12,7 @@ use Illuminate\Queue\SerializesModels;
 class Voting extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
+
     protected User $user;
     protected Vote $vote;
 
@@ -20,10 +21,12 @@ class Voting extends Notification implements ShouldQueue
         $this->user = $user;
         $this->vote = $vote;
     }
+
     public function via(object $notifiable): array
     {
         return ['database'];
     }
+
     public function toDatabase(object $notifiable): array
     {
         return [
@@ -34,7 +37,7 @@ class Voting extends Notification implements ShouldQueue
                 'id' => $this->user->id,
                 'name' => $this->user->name,
                 'avatar' => $this->user->avatar ?? null,
-                ]
-            ];
+            ]
+        ];
     }
 }

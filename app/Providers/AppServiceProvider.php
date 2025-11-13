@@ -19,11 +19,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
     }
+
     public function boot(): void
     {
-      Post::observe(classes: PostObserver::class);
-      Comment::observe(classes: CommentObserver::class);
-      Vote::observe(classes: VoteObserver::class);
-      FriendConnectionModel::observe(classes: FriendRequestObserver::class);
+        Post::observe(classes: PostObserver::class);
+        Comment::observe(classes: CommentObserver::class);
+        Vote::observe(classes: VoteObserver::class);
+        FriendConnectionModel::observe(classes: FriendRequestObserver::class);
     }
 }

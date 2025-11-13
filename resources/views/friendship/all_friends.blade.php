@@ -10,7 +10,8 @@
     @else
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             @foreach($friends as $friend)
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 flex flex-col items-center">
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 flex flex-col items-center">
                     <img
                         src="{{ asset('storage/images/avatars/' . $friend->avatar) }}"
                         alt="{{ $friend->name }}'s avatar"

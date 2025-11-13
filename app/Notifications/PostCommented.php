@@ -15,15 +15,18 @@ class PostCommented extends Notification implements ShouldQueue
 
     protected Comment $comment;
     protected User $sender;
+
     public function __construct(Comment $comment, User $sender)
     {
         $this->comment = $comment;
         $this->sender = $sender;
     }
+
     public function via(object $notifiable): array
     {
         return ['database'];
     }
+
     public function toDatabase(object $notifiable): array
     {
         return [

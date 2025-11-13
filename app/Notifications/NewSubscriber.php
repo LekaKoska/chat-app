@@ -10,7 +10,9 @@ use Illuminate\Notifications\Notification;
 class NewSubscriber extends Notification implements ShouldQueue
 {
     use Queueable;
+
     protected User $subscriber;
+
     public function __construct(User $subscriber)
     {
         $this->subscriber = $subscriber;
@@ -20,6 +22,7 @@ class NewSubscriber extends Notification implements ShouldQueue
     {
         return ['database'];
     }
+
     public function toDatabase(object $notifiable): array
     {
         return [

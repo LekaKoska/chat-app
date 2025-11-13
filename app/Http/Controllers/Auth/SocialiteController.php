@@ -14,6 +14,7 @@ class SocialiteController extends Controller
     {
         return Socialite::driver(driver: $provider)->redirect();
     }
+
     public function handleCallback($provider, SocialiteService $socialiteService): RedirectResponse
     {
         $user = $socialiteService->callback($provider);

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class FriendConnectionModel extends Model
 {
     const TABLE = 'friends_connection';
-    protected $casts = [ 'status' => FriendStatus::class];
+    protected $casts = ['status' => FriendStatus::class];
 
     protected $table = self::TABLE;
     protected $fillable = ['sender_id', 'receiver_id', 'status'];

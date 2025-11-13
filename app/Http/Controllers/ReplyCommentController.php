@@ -13,10 +13,10 @@ class ReplyCommentController extends Controller
 
     public function store(ReplyRequest $request): RedirectResponse
     {
-       $data = array_merge($request->validated(), ['user_id' => auth()->id()]);
-       ReplyComment::create($data);
+        $data = array_merge($request->validated(), ['user_id' => auth()->id()]);
+        ReplyComment::create($data);
 
-       return redirect()->back();
+        return redirect()->back();
 
     }
 
@@ -30,8 +30,8 @@ class ReplyCommentController extends Controller
 
     public function destroy(ReplyComment $reply): RedirectResponse
     {
-       $this->authorize(ability: 'delete', arguments: $reply);
-       $reply->delete();
-       return redirect()->back();
+        $this->authorize(ability: 'delete', arguments: $reply);
+        $reply->delete();
+        return redirect()->back();
     }
 }

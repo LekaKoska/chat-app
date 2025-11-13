@@ -13,14 +13,17 @@ class FriendRequest extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     protected User $sender;
+
     public function __construct(User $user)
     {
         $this->sender = $user;
     }
+
     public function via(object $notifiable): array
     {
         return ['database'];
     }
+
     public function toDatabase(object $notifiable): array
     {
         return [

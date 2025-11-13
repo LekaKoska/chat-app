@@ -18,11 +18,9 @@ class PostObserver
 
             $author = $post->ownerOfPost;
 
-            if($author->followers)
-            {
+            if ($author->followers) {
                 $delay = 5;
-                foreach ($author->followers as $subscriber)
-                {
+                foreach ($author->followers as $subscriber) {
                     Mail::to($subscriber->email)
                         ->later(now()->addSeconds($delay), new PostPublishedToSubscriberMail($post));
                     $delay++;
