@@ -59,10 +59,12 @@
 
                     {{-- Upload form --}}
                     <div class="flex-1 w-full">
-                        <form action="{{ route('profile.avatar') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        <form action="{{ route('profile.avatar') }}" method="POST" enctype="multipart/form-data"
+                              class="space-y-4">
                             @csrf
                             <div>
-                                <label for="profile_image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label for="profile_image"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     Choose a new profile picture
                                 </label>
                                 <input
@@ -91,7 +93,7 @@
             </div>
 
             <script>
-                document.getElementById('profile_image').addEventListener('change', function(event) {
+                document.getElementById('profile_image').addEventListener('change', function (event) {
                     const [file] = event.target.files;
                     if (file) {
                         const preview = document.getElementById('avatarPreview');

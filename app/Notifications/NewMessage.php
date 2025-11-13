@@ -3,18 +3,18 @@
 namespace App\Notifications;
 
 use App\Models\Message;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
 
 class NewMessage extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
+
     protected Message $message;
+
     public function __construct(Message $message)
     {
         $this->message = $message;

@@ -15,6 +15,7 @@ class PostPublishedToSubscriberMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public Post $post;
+
     public function __construct(Post $post)
     {
         $this->post = $post;
@@ -34,6 +35,7 @@ class PostPublishedToSubscriberMail extends Mailable implements ShouldQueue
             with: ['post' => $this->post]
         );
     }
+
     public function attachments(): array
     {
         return [];

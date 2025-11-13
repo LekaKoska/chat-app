@@ -3,9 +3,10 @@
 namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
+
 trait VoteTrait
 {
-    public function voting(Relation $modelWithRelation, string $column,  int $value): void
+    public function voting(Relation $modelWithRelation, string $column, int $value): void
     {
         $existingVote = $modelWithRelation
             ->where('user_id', auth()->id())
@@ -19,11 +20,11 @@ trait VoteTrait
             }
         }
 
-         $modelWithRelation->updateOrCreate([
+        $modelWithRelation->updateOrCreate([
             'user_id' => auth()->id(),
             $column => $modelWithRelation->getParent()->id,
-           ],
-             ['vote' => $value]
-         );
+        ],
+            ['vote' => $value]
+        );
     }
 }

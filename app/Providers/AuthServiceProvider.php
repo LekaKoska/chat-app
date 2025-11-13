@@ -17,6 +17,7 @@ class AuthServiceProvider extends BaseAuthServiceProvider
         Post::class => PostPolicy::class,
         ReplyComment::class => ReplyPolicy::class
     ];
+
     public function boot(): void
     {
         $this->registerPolicies();

@@ -17,9 +17,11 @@
     <div class="space-y-4">
         @foreach(User::all() as $user)
             @if(auth()->id() !== $user->id)
-                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200 hover:bg-gray-100 transition">
+                <div
+                    class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200 hover:bg-gray-100 transition">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold">
+                        <div
+                            class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold">
                             {{ strtoupper(substr($user->name, 0, 1)) }}
                         </div>
                         <span class="text-gray-800 font-medium">{{ $user->name }}</span>

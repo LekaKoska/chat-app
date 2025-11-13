@@ -15,6 +15,7 @@ class Subscription extends Model
     {
         return $this->belongsTo(related: User::class, foreignKey: 'subscriber_id', ownerKey: 'id');
     }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(related: User::class, foreignKey: 'user_id', ownerKey: 'id');

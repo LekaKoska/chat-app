@@ -16,12 +16,14 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     use UploadImage;
+
     public function edit(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
     }
+
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
@@ -34,6 +36,7 @@ class ProfileController extends Controller
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
@@ -55,8 +58,7 @@ class ProfileController extends Controller
     public function avatar(NewAvatarRequest $request)
     {
         $avatar = Auth::user()->avatar;
-        if($avatar !== null)
-        {
+        if ($avatar !== null) {
             File::delete(paths: "storage/images/avatars/$avatar");
         }
         $name = $this->avatarUpload(file: $request->file('profile_image'), path: '/images/avatars/');
@@ -68,7 +70,7 @@ class ProfileController extends Controller
 
     public function info(User $user)
     {
-       $user->loadCount(['posts']);
+        $user->loadCount(['posts']);
         return view('profile.info', compact('user'));
     }
 }

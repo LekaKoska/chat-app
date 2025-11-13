@@ -9,7 +9,9 @@ use Illuminate\Notifications\Notification;
 class FriendRequestAccepted extends Notification
 {
     use Queueable;
+
     protected User $accepter;
+
     public function __construct(User $accepter)
     {
         $this->accepter = $accepter;
@@ -19,6 +21,7 @@ class FriendRequestAccepted extends Notification
     {
         return ['database'];
     }
+
     public function toDatabase(object $notifiable): array
     {
         return [

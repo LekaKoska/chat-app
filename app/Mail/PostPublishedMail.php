@@ -15,16 +15,19 @@ class PostPublishedMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public Post $post;
+
     public function __construct(Post $post)
     {
         $this->post = $post;
     }
+
     public function envelope(): Envelope
     {
         return new Envelope(
             subject: 'Post Published Mail',
         );
     }
+
     public function content(): Content
     {
         return new Content(
@@ -32,6 +35,7 @@ class PostPublishedMail extends Mailable implements ShouldQueue
             with: ['post' => $this->post]
         );
     }
+
     public function attachments(): array
     {
         return [];
