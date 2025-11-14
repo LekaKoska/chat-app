@@ -59,7 +59,7 @@ class PostController extends Controller
     }
     public function show(Post $post): View
     {
-        $post->loadCount(relations: 'comments');
+        $post->loadCount(relations: ['comments', 'ownerOfPost']);
         $this->authorize(ability: 'view', arguments: $post);
         return view(view: 'posts.permalink', data: compact('post'));
     }
