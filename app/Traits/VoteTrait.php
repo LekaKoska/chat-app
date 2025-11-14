@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Cache;
 
 trait VoteTrait
 {
@@ -26,5 +27,6 @@ trait VoteTrait
         ],
             ['vote' => $value]
         );
+        Cache::tags(['posts'])->flush();
     }
 }
