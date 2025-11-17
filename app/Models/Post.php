@@ -52,5 +52,4 @@ class Post extends Model
         return $this->hasOne(related: Vote::class, foreignKey: 'post_id', localKey: 'id');
     }
 
-
 }

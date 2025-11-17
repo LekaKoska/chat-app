@@ -28,13 +28,13 @@ class PostController extends Controller
             ->latest()
             ->paginate(10)
         );
-
         if (auth()->check()) {
             $userId = auth()->id();
             $posts->getCollection()->load(['userVote' => function ($q) use ($userId) {
                 $q->where('user_id', $userId);
             }]);
         }
+
         return view('posts.all', ['posts' => $posts]);
     }
     public function search(Request $request): View
@@ -45,7 +45,6 @@ class PostController extends Controller
             ->paginate(10);
         return view(view: "posts.all", data: compact('posts'));
     }
-
     public function create(): View
     {
         return view(view: 'posts.add');
@@ -59,7 +58,10 @@ class PostController extends Controller
     }
     public function show(Post $post): View
     {
-        $post->loadCount(relations: ['comments', 'ownerOfPost']);
+        $post = Cache::tags(["post:{$post->id}"])->remember("post:{$post->id}", now()->addMinutes(10),
+            fn() => $post->load('ownerOfPost',
+                'comments.user',
+                'comments.replies.user')->loadCount('comments'));
         $this->authorize(ability: 'view', arguments: $post);
         return view(view: 'posts.permalink', data: compact('post'));
     }
@@ -74,7 +76,6 @@ class PostController extends Controller
         $post->update($data);
         return redirect()->route('posts.index');
     }
-
     public function upvote(Post $post): RedirectResponse
     {
         $this->voting(modelWithRelation: $post->votes(), column: 'post_id', value: 1);
@@ -93,20 +94,27 @@ class PostController extends Controller
     }
     public function sort(Request $request): View
     {
-        $sort = $request->get('sort');
+        $sort = $request->get('sort', 'latest');
 
-        $query = Post::with('ownerOfPost')
-            ->where('status', PostStatus::Published)
-            ->withCount(['comments'])
-            ->withCount(['votes as votes_count' => fn($q) => $q->where('vote', 1)]);
+        $posts = Cache::tags(['posts'])->remember("post.sort.{$sort}", 300, function () use ($sort) {
+            $query = Post::with(['ownerOfPost', 'currentUserVote'])
+                ->where('status', PostStatus::Published)
+                ->withCount('comments')
+                ->withCount([
+                    'votes as votes_count' => fn($q) => $q->where('vote', 1)
+                ]);
 
-        $query = match ($sort) {
-            'likes' => $query->orderBy('votes_count', 'desc'),
-            'comments' => $query->orderBy('comments_count', 'desc'),
-            default => $query->latest(),
-        };
+            $query = match ($sort) {
+                'likes' => $query->orderBy('votes_count', 'desc'),
+                'comments' => $query->orderBy('comments_count', 'desc'),
+                default => $query->latest(),
+            };
 
-        $posts = $query->paginate(10)->withQueryString();
+            return $query->paginate(10)->withQueryString();
+        });
+
         return view('posts.all', compact('posts'));
     }
+
 }
+
