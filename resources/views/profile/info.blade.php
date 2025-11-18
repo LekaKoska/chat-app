@@ -29,7 +29,7 @@
                     <p class="text-gray-500 text-sm">Friends</p>
                 </div>
                 <div>
-                    <p class="text-xl font-bold text-gray-700">{{$user->followers->count() ?? 0}}</p>
+                    <p class="text-xl font-bold text-gray-700">{{$user->followers_count ?? 0}}</p>
                     <p class="text-gray-500 text-sm">Subscribers</p>
                 </div>
             </div>

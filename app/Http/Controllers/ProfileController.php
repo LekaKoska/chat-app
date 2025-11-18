@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FriendStatus;
 use App\Http\Requests\NewAvatarRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
@@ -9,6 +10,7 @@ use App\Traits\UploadImage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -68,9 +70,19 @@ class ProfileController extends Controller
         return redirect()->back();
     }
 
-    public function info(User $user)
+    public function info(User $user): View
     {
-        $user->loadCount(['posts']);
-        return view('profile.info', compact('user'));
+        $profile = Cache::tags(["user:{$user->id}"])->remember(
+            "user.info.{$user->id}",
+            now()->addMinutes(10),
+            fn () => $user->load([
+                'sendFriend',
+                'receiveFriend',
+                'followers',
+                'following',
+            ])->loadCount(['posts', 'followers'])
+        );
+
+        return view('profile.info', ['user' => $profile]);
     }
 }
