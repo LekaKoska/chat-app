@@ -20,9 +20,9 @@
                 <div
                     class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200 hover:bg-gray-100 transition">
                     <div class="flex items-center gap-3">
-                        <div
-                            class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold">
-                            {{ strtoupper(substr($user->name, 0, 1)) }}
+                        <div>
+                            <img src="{{ asset('storage/images/avatars/' . $user->avatar) }}"
+                                 class="w-10 h-10 rounded-full object-cover mr-3 border border-gray-300" alt="profile_image">
                         </div>
                         <span class="text-gray-800 font-medium">{{ $user->name }}</span>
                     </div>

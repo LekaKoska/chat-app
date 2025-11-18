@@ -1,5 +1,6 @@
 @vite('resources/css/app.css')
 @vite('resources/js/app.js')
+<x-app-layout>
 
 <div class="max-w-4xl mx-auto px-6 py-10">
     <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-8 text-center">
@@ -25,7 +26,7 @@
                     </p>
 
                     <div class="mt-4 flex gap-3">
-                        <a href=""
+                        <a href="{{route('profile.info', $friend->name)}}"
                            class="text-indigo-600 hover:text-indigo-800 dark:hover:text-indigo-400 text-sm font-medium">
                             View Profile
                         </a>
@@ -43,3 +44,5 @@
         </div>
     @endif
 </div>
+
+</x-app-layout>
