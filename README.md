@@ -19,6 +19,7 @@ Welcome to the repository for a modern, feature-rich chat and community platform
 | Real-time | Laravel Reverb |
 | Frontend | Tailwind CSS, Alpine.js (Optional) |
 | Queues | Laravel Queue System |
+| Cache | Redis |
 
 ---
 
