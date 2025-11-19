@@ -44,7 +44,7 @@
                     <x-slot name="content">
                         <div class="overflow-y-auto max-h-96" id="notify-list">
                             @forelse(Auth::user()->unreadNotifications as $notification)
-                                <form id="notif-form-{{ $notification->id }}"
+                                <form id="notify-form-{{ $notification->id }}"
                                       action="{{ route('notification.read', $notification->id) }}"
                                       method="POST"
                                       class="border-b border-gray-200 dark:border-gray-700">
