@@ -6,6 +6,7 @@ use App\Enums\FriendStatus;
 use App\Models\FriendConnectionModel;
 use App\Notifications\FriendRequest;
 use App\Notifications\FriendRequestAccepted;
+use Illuminate\Support\Facades\Cache;
 
 class FriendRequestObserver
 {
@@ -20,6 +21,7 @@ class FriendRequestObserver
 
     public function updated(FriendConnectionModel $friendRequest): void
     {
+        Cache::tags(["user:$friendRequest->receiver_id"])->flush();
         if ($friendRequest->wasChanged('status') && $friendRequest->status === FriendStatus::Accepted) {
             $sender = $friendRequest->sender;
             $accepter = $friendRequest->receiver;

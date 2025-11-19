@@ -13,7 +13,6 @@
         <script>window.auth = {user: {id: {{ auth()->id() }}, name: @json(auth()->user()->name) }};</script>
     @endif
     <style>
-        /* Optional: smooth out the page width */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -21,21 +20,6 @@
     </style>
 </head>
 <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
-<header class="py-4 px-6 border-b border-gray-200 dark:border-gray-800">
-    <div class="container flex items-center justify-between">
-        <a href="/" class="text-xl font-semibold text-gray-900 dark:text-white">MyChatApp</a>
-        <nav class="flex items-center gap-3">
-            @guest
-                <a href="{{ route('login') }}"
-                   class="text-sm text-gray-700 dark:text-gray-300 hover:underline">Login</a>
-                <a href="{{ route('register') }}" class="text-sm text-indigo-600 hover:underline">Register</a>
-            @else
-                <a href="{{ route('dashboard') }}" class="text-sm text-indigo-600 hover:underline">Dashboard</a>
-            @endguest
-        </nav>
-    </div>
-</header>
-
 <main class="py-12 px-4 sm:px-6 lg:px-16">
     <section class="container">
         <div class="mb-10">

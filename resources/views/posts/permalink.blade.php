@@ -110,13 +110,15 @@
                 @forelse($post->comments ?? [] as $comment)
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                            <img
-                                src="{{ $comment->user->avatar
+                            <a href="{{ route('profile.info', $comment->user->name) }}">
+                                <img
+                                    src="{{ $comment->user->avatar
                                         ? asset('storage/images/avatars/' . $comment->user->avatar)
                                         : asset('default-avatar.png') }}"
-                                alt="Avatar"
-                                class="w-full h-full object-cover"
-                            >
+                                    alt="Avatar"
+                                    class="w-full h-full object-cover"
+                                >
+                            </a>
                         </div>
 
                         <div class="flex-1 bg-gray-50 dark:bg-gray-900 rounded-xl p-3">

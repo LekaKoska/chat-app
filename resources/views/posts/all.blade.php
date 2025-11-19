@@ -76,13 +76,13 @@
                                 @csrf
                                 <button type="submit"
                                         class="w-10 h-10 flex items-center justify-center rounded hover:bg-gray-200 transition-colors
-                {{ auth()->user() && $post->votes()->where('user_id', auth()->id())->where('vote', 1)->exists() ? 'text-green-500 font-bold' : 'text-gray-500' }}">
+                {{ optional($post->userVote)->vote === 1 ? 'text-green-500 font-bold' : 'text-gray-500' }}">
                                     ▲
                                 </button>
                             </form>
 
                             <div class="my-1 font-semibold text-gray-700">
-                                {{ request('sort') === 'likes' ? ($post->votes_count ?? 0) : ($post->votes_count ?? 0) }}
+                                {{ $post->votes_score ?? 0 }}
                             </div>
 
                             <form method="POST" action="{{route('posts.downvote', $post->id)}}">
@@ -90,7 +90,7 @@
                                 <input type="hidden" name="vote" value="-1">
                                 <button type="submit"
                                         class="w-10 h-10 flex items-center justify-center rounded hover:bg-gray-200 transition-colors
-                {{ auth()->user() && $post->votes()->where('user_id', auth()->id())->where('vote', -1)->exists() ? 'text-red-500 font-bold' : 'text-gray-500' }}">
+                {{   optional($post->userVote)->vote === -1  ? 'text-red-500 font-bold' : 'text-gray-500' }}">
                                     ▼
                                 </button>
                             </form>

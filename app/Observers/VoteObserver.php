@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Vote;
 use App\Notifications\Voting;
+use Illuminate\Support\Facades\Cache;
 
 class VoteObserver
 {
@@ -18,6 +19,7 @@ class VoteObserver
 
     public function created(Vote $vote): void
     {
+        Cache::tags(['posts'])->flush();
         $this->notifyPostOwner($vote);
     }
 

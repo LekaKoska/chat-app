@@ -29,7 +29,7 @@
                     <p class="text-gray-500 text-sm">Friends</p>
                 </div>
                 <div>
-                    <p class="text-xl font-bold text-gray-700">{{$user->followers->count() ?? 0}}</p>
+                    <p class="text-xl font-bold text-gray-700">{{$user->followers_count ?? 0}}</p>
                     <p class="text-gray-500 text-sm">Subscribers</p>
                 </div>
             </div>
@@ -60,8 +60,15 @@
 
             @if($user->friends->count() > 0)
                 <div class="mt-10">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Friends</h3>
+                    @if(\auth()->id() === $user->id)
+                        <a href="{{route('friends.request.index')}}"><h3 class="text-lg font-semibold text-gray-800 mb-4 p-2 rounded hover:bg-gray-100 transition-colors duration-200">
+                                Friends
+                            </h3>
+                        </a>
                     <div class="grid grid-cols-2 gap-4">
+                        @else
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Friends</h3>
+                        @endif
                         @foreach ($user->friends as $friend)
                             <div
                                 class="flex items-center bg-gray-50 p-3 rounded-xl shadow-sm hover:bg-gray-100 transition">
@@ -78,6 +85,11 @@
                         @endforeach
                     </div>
                 </div>
+            @if(\auth()->id() === $user->id)
+                <div>
+                    <a href="{{route('friends.request.show')}}">Add friends</a>
+                </div>
+                @endif
             @else
                 <p class="mt-10 text-center text-gray-500 italic">This user has no friends yet 😅</p>
             @endif

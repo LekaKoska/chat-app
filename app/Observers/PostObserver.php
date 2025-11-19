@@ -6,12 +6,22 @@ use App\Enums\PostStatus;
 use App\Mail\PostPublishedMail;
 use App\Mail\PostPublishedToSubscriberMail;
 use App\Models\Post;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
 class PostObserver
 {
+    private function clearCache(): void
+    {
+        Cache::tags(['posts'])->flush();
+    }
+    public function created(Post $post): void
+    {
+        $this->clearCache();
+    }
     public function updated(Post $post): void
     {
+        $this->clearCache();
         if ($post->wasChanged('status') && $post->status === PostStatus::Published) {
 
             Mail::to(users: $post->ownerOfPost->email)->send(new PostPublishedMail(post: $post));
@@ -27,5 +37,9 @@ class PostObserver
                 }
             }
         }
+    }
+    public function deleted(): void
+    {
+        $this->clearCache();
     }
 }
