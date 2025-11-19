@@ -6,6 +6,7 @@ use App\Enums\FriendStatus;
 use App\Models\FriendConnectionModel;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class FriendConnectionController extends Controller
@@ -14,16 +15,17 @@ class FriendConnectionController extends Controller
 
     public function all(): View
     {
-        $friends = FriendConnectionModel::where(function ($query) {
+
+        $friends = Cache::tags(['all_friends'])->remember('friends_list', now()->addMinutes(10), fn() => FriendConnectionModel::where(function ($query) {
             $userId = auth()->id();
             $query->where('sender_id', $userId)
                 ->orWhere('receiver_id', $userId);
         })
             ->where('status', FriendStatus::Accepted->value)
             ->with(['sender', 'receiver'])
-            ->get();
+            ->get());
 
-        $friendsList = $friends->map(function ($friend) {
+        $friendsList =  $friends->map(function ($friend) {
             return $friend->sender_id === auth()->id()
                 ? $friend->receiver
                 : $friend->sender;
@@ -88,6 +90,7 @@ class FriendConnectionController extends Controller
         }
 
         $friendship->update(['status' => $action]);
+        Cache::tags(['all_friends'])->flush();
         return redirect()->back()->with(key: 'success', value: 'Friend request is successfully confirmed!');
     }
 

@@ -51,8 +51,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getFriendsAttribute()
     {
-        $sent = $this->sendFriend()->wherePivot(column: 'status', operator: FriendStatus::Accepted)->get();
-        $received = $this->receiveFriend()->wherePivot(column: 'status', operator: FriendStatus::Accepted)->get();
+        $sent = $this->sendFriend->where('pivot.status', FriendStatus::Accepted);
+        $received = $this->receiveFriend->where('pivot.status', FriendStatus::Accepted);
 
         return $sent->merge($received);
     }
