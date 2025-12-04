@@ -18,7 +18,6 @@ class FriendRequestObserver
         $receiver->notify(new FriendRequest(user: $sender));
 
     }
-
     public function updated(FriendConnectionModel $friendRequest): void
     {
         Cache::tags(["user:$friendRequest->receiver_id"])->flush();
