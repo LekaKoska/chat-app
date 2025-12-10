@@ -64,6 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource(name: 'reply', controller: ReplyCommentController::class);
 
     Route::put('/notification/{id}', [MakeReadNotificationController::class, 'read'])->name('notification.read');
+    Route::get('/notification/read-all', [MakeReadNotificationController::class, 'readAll'])->name('notification.read.all');
 
     Route::controller(ChatController::class)->group(function () {
         Route::post('chat', 'sendMessage')->name('chat');

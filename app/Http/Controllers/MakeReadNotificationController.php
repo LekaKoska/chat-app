@@ -21,4 +21,10 @@ class MakeReadNotificationController extends Controller
         }
         return redirect()->to($url);
     }
+
+    public function readAll(): RedirectResponse
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return redirect()->back();
+    }
 }

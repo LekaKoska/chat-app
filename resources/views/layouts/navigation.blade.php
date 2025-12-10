@@ -44,6 +44,7 @@
                     <x-slot name="content">
                         <div class="overflow-y-auto max-h-96" id="notify-list">
                             @forelse(Auth::user()->unreadNotifications as $notification)
+
                                 <form id="notify-form-{{ $notification->id }}"
                                       action="{{ route('notification.read', $notification->id) }}"
                                       method="POST"
@@ -51,7 +52,7 @@
                                     @csrf
                                     @method('PUT')
                                     <a href="{{ $notification->data['url'] }}"
-                                       onclick="event.preventDefault(); document.getElementById('notif-form-{{ $notification->id }}').submit();"
+                                       onclick="event.preventDefault(); document.getElementById('notify-form-{{ $notification->id }}').submit();"
                                        class="block px-4 py-2 flex items-center space-x-3 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                                         <img
                                             src="{{ "/storage/images/avatars/{$notification->data['sender']['avatar']}" }}"
@@ -67,6 +68,10 @@
                                     No notifications yet.
                                 </div>
                             @endforelse
+                            @if(\auth()->user()->notification !== null)
+                                    <a href="{{route('notification.read.all')}}">Read all</a>
+                            @endif
+
                         </div>
                     </x-slot>
                 </x-dropdown>
