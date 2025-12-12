@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\FriendStatus;
 use App\Http\Requests\NewAvatarRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
@@ -11,7 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -57,13 +56,13 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function avatar(NewAvatarRequest $request)
+    public function avatar(NewAvatarRequest $request): RedirectResponse
     {
         $avatar = Auth::user()->avatar;
         if ($avatar !== null) {
-            File::delete(paths: "storage/images/avatars/$avatar");
+            Storage::disk(name: 'public')->delete("images/avatars/$avatar");
         }
-        $name = $this->avatarUpload(file: $request->file('profile_image'), path: '/images/avatars/');
+        $name = $this->avatarUpload(file: $request->file('profile_image'), path: 'images/avatars');
 
         Auth::user()->update(['avatar' => $name]);
 

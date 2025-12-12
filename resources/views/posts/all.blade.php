@@ -100,7 +100,7 @@
                             <img
                                 src="{{ $post->ownerOfPost->avatar
                                     ? asset('storage/images/avatars/' . $post->ownerOfPost->avatar)
-                                    : asset('default-avatar.png') }}"
+                                    : asset('storage/images/avatars/default-avatar.png') }}"
                                 alt="Avatar"
                                 class="w-full h-full object-cover">
                         </div>

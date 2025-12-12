@@ -2,23 +2,16 @@
 
 namespace Database\Factories;
 
+use App\Enums\PostStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
- */
 class PostFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'user_id' => rand(1, 2),
-            'content' => $this->faker->realText(150),
+            'content' => fake()->realText(30),
+            'status' => PostStatus::Published
         ];
     }
 }

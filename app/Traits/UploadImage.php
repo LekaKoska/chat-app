@@ -13,7 +13,7 @@ trait UploadImage
         $name = uniqid() . ".webp";
         $manager = new ImageManager(new Driver());
         $image = $manager->read($file)->toWebp();
-        Storage::disk(name: 'public')->put(path: "/$path/$name", contents: (string)$image);
+        Storage::disk(name: 'public')->put(path: "$path/$name", contents: (string)$image);
 
         return $name;
     }
