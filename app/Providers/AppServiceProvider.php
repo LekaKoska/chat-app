@@ -17,11 +17,12 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        Schema::defaultStringLength(191);
+            //
     }
 
     public function boot(): void
     {
+          Schema::defaultStringLength(191);
         Post::observe(classes: PostObserver::class);
         Comment::observe(classes: CommentObserver::class);
         Vote::observe(classes: VoteObserver::class);

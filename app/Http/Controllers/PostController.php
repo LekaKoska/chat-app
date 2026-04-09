@@ -64,6 +64,7 @@ class PostController extends Controller
 
     public function update(PostRequest $request, Post $post): RedirectResponse
     {
+            $this->authorize(ability: 'update', arguments: $post);
         $data = array_merge($request->validated(), ['user_id' => $request->user()->id]);
         $post->update($data);
         return redirect()->route('posts.index');
