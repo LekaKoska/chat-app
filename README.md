@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 💬 Chat and Community Platform
 
 Welcome to the repository for a modern, feature-rich chat and community platform built with Laravel. This application allows users to connect, share content, and engage in real-time interactions, mimicking the core functionalities of contemporary social networks.
@@ -108,3 +109,6 @@ php artisan reverb:start
 ```
 Once all four commands are running, your application should be fully operational and accessible at http://127.0.0.1:8000 (or the port specified by ```php artisan serve```).
 
+=======
+Chat app
+>>>>>>> dev
