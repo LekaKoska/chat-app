@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NewAvatarRequest;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
+use App\Traits\UploadImage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
+    use UploadImage;
+
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -21,9 +25,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
@@ -37,9 +38,6 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
@@ -56,5 +54,34 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function avatar(NewAvatarRequest $request): RedirectResponse
+    {
+        $avatar = Auth::user()->avatar;
+        if ($avatar !== null) {
+            Storage::disk(name: 'public')->delete("images/avatars/$avatar");
+        }
+        $name = $this->avatarUpload(file: $request->file('profile_image'), path: 'images/avatars');
+
+        Auth::user()->update(['avatar' => $name]);
+
+        return redirect()->back();
+    }
+
+    public function info(User $user): View
+    {
+        $profile = Cache::tags(["user:{$user->id}"])->remember(
+            "user.info.{$user->id}",
+            now()->addMinutes(10),
+            fn () => $user->load([
+                'sendFriend',
+                'receiveFriend',
+                'followers',
+                'following',
+            ])->loadCount(['posts', 'followers'])
+        );
+
+        return view('profile.info', ['user' => $profile]);
     }
 }
