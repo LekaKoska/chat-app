@@ -29,13 +29,13 @@ foreach ($attributes->all() as $__key => $__value) {
 unset($__defined_vars, $__key, $__value); ?>
 
 <?php
-    $type = match ($method) {
-        'GET', 'OPTIONS', 'ANY' => 'default',
-        'POST' => 'success',
-        'PUT', 'PATCH' => 'primary',
-        'DELETE' => 'error',
-        default => 'default',
-    };
+$type = match ($method) {
+    'GET', 'OPTIONS', 'ANY' => 'default',
+    'POST' => 'success',
+    'PUT', 'PATCH' => 'primary',
+    'DELETE' => 'error',
+    default => 'default',
+};
 ?>
 
 <?php if (isset($component)) { $__componentOriginal0bc865510ef3ecddbe48edc4e8cc9ddb = $component; } ?>

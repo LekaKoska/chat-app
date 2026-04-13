@@ -39,4 +39,4 @@ unset($__defined_vars, $__key, $__value); ?>
 </a>
 </td>
 </tr>
-<?php /**PATH C:\Users\alekk\Desktop\PROJEKTI\chat-app\vendor\laravel\framework\src\Illuminate\Mail/resources/views/html/header.blade.php ENDPATH**/ ?>
+<?php /**PATH /var/www/html/vendor/laravel/framework/src/Illuminate/Mail/resources/views/html/header.blade.php ENDPATH**/ ?>

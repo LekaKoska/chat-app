@@ -32,16 +32,16 @@ unset($__defined_vars, $__key, $__value); ?>
     <h2 class="text-lg font-semibold text-neutral-900 dark:text-white">Headers</h2>
     <div class="flex flex-col">
         <?php $__currentLoopData = $headers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="flex max-w-full items-baseline gap-2 h-10 text-sm font-mono">
-                <div class="uppercase text-neutral-500 dark:text-neutral-400 shrink-0"><?php echo e($key); ?></div>
-                <div class="min-w-6 grow h-3 border-b-2 border-dotted border-neutral-300 dark:border-white/20"></div>
-                <div class="truncate text-neutral-900 dark:text-white">
+        <div class="flex max-w-full items-baseline gap-2 h-10 text-sm font-mono">
+            <div class="uppercase text-neutral-500 dark:text-neutral-400 shrink-0"><?php echo e($key); ?></div>
+            <div class="min-w-6 grow h-3 border-b-2 border-dotted border-neutral-300 dark:border-white/20"></div>
+            <div class="truncate text-neutral-900 dark:text-white">
                 <span data-tippy-content="<?php echo e($value); ?>">
                     <?php echo e($value); ?>
 
                 </span>
-                </div>
             </div>
+        </div>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 </div>

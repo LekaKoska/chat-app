@@ -11,4 +11,4 @@
 
 <?php echo strip_tags($footer ?? ''); ?>
 
-<?php /**PATH C:\Users\alekk\Desktop\PROJEKTI\chat-app\vendor\laravel\framework\src\Illuminate\Mail/resources/views/text/layout.blade.php ENDPATH**/ ?>
+<?php /**PATH /var/www/html/vendor/laravel/framework/src/Illuminate/Mail/resources/views/text/layout.blade.php ENDPATH**/ ?>

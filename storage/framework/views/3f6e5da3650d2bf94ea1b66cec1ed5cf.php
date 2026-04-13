@@ -100,4 +100,4 @@
 <?php $component = $__componentOriginal3287929725b3f878740bf3f25881b9ff; ?>
 <?php unset($__componentOriginal3287929725b3f878740bf3f25881b9ff); ?>
 <?php endif; ?>
-<?php /**PATH C:\Users\alekk\Desktop\PROJEKTI\chat-app\vendor\laravel\framework\src\Illuminate\Mail/resources/views/text/message.blade.php ENDPATH**/ ?>
+<?php /**PATH /var/www/html/vendor/laravel/framework/src/Illuminate/Mail/resources/views/text/message.blade.php ENDPATH**/ ?>
