@@ -26,10 +26,6 @@
   ),
   'laravel/reverb' => 
   array (
-    'aliases' => 
-    array (
-      'Output' => 'Laravel\\Reverb\\Output',
-    ),
     'providers' => 
     array (
       0 => 'Laravel\\Reverb\\ApplicationManagerServiceProvider',
@@ -80,6 +76,13 @@
     'providers' => 
     array (
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    ),
+  ),
+  'resend/resend-laravel' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Resend\\Laravel\\ResendServiceProvider',
     ),
   ),
 );
