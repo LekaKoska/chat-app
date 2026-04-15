@@ -58,7 +58,7 @@ class PostController extends Controller
     }
     public function show(Post $post): View
     {
-        $post = Cache::tags(["post:{$post->id}"])->remember("post:{$post->id}", now()->addMinutes(10),
+        $post = Cache::remember("post:{$post->id}", now()->addMinutes(10),
             fn() => $post->load('ownerOfPost',
                 'comments.user',
                 'comments.replies.user')->loadCount('comments'));
@@ -98,7 +98,7 @@ class PostController extends Controller
         $page = $request->integer('page', 1);
         $cacheKey = "post.sort.{$sort}.page.{$page}";
 
-        $posts = Cache::tags(['posts'])->remember($cacheKey, now()->addMinutes(5), function () use ($sort) {
+        $posts = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($sort) {
             $query = Post::with(['ownerOfPost'])
                 ->where('status', PostStatus::Published)
                 ->withCount(['comments'])
