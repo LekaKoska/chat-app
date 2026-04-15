@@ -21,7 +21,7 @@ class PostController extends Controller
         $page = request('page', 1);
         $cacheKey = 'all_posts_page_' . $page;
 
-        $posts = Cache::tags(['posts'])->remember($cacheKey, 300, fn() =>
+        $posts = Cache::remember($cacheKey, 300, fn() =>
         Post::with('ownerOfPost')
             ->withSum('votes as votes_score', 'vote')
             ->where('status', PostStatus::Published)

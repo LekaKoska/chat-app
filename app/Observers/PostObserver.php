@@ -13,7 +13,7 @@ class PostObserver
 {
     private function clearCache(): void
     {
-        Cache::tags(['posts'])->flush();
+        Cache::flush();
     }
     public function created(Post $post): void
     {
