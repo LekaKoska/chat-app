@@ -120,7 +120,6 @@ class PostController extends Controller
                 'userVote' => fn($query) => $query->where('user_id', $userId),
             ]);
         }
-
         return view('posts.all', compact('posts'));
     }
 
