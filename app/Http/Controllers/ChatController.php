@@ -48,37 +48,44 @@ class ChatController extends Controller
 
     public function conversations(): View
     {
-        // Dohvati sve konverzacije za trenutnog korisnika
-        $conversations = Message::where(function ($query) {
+        // Dohvati sve poruke gdje je korisnik učesnik
+        $messages = Message::where(function ($query) {
             $query->where('sender_id', Auth::id())
                   ->orWhere('receiver_id', Auth::id());
         })
-        ->selectRaw('(CASE WHEN sender_id = ? THEN receiver_id ELSE sender_id END) as participant_id', [Auth::id()])
-        ->distinct('participant_id')
         ->latest('created_at')
         ->get();
 
-        // Za svaki participant, dohvati podatke i posljednju poruku
+        // Grupiraj po participant_id u PHP-u
+        $participantMap = [];
+        foreach ($messages as $msg) {
+            $participantId = $msg->sender_id === Auth::id() ? $msg->receiver_id : $msg->sender_id;
+
+            if (!isset($participantMap[$participantId])) {
+                $participantMap[$participantId] = $msg;
+            }
+        }
+
+        // Sortiraj po zadnjoj poruci (newest first)
+        usort($participantMap, function ($a, $b) {
+            return $b->created_at->timestamp - $a->created_at->timestamp;
+        });
+
+        // Kreira array sa svim potrebnim podacima
         $chats = collect([]);
-        foreach ($conversations as $conv) {
-            $participant = User::find($conv->participant_id);
+        foreach ($participantMap as $participantId => $lastMsg) {
+            $participant = User::find($participantId);
             if (!$participant) continue;
 
-            $lastMessage = Message::where(function ($query) use ($conv) {
-                $query->where('sender_id', Auth::id())
-                      ->where('receiver_id', $conv->participant_id);
-            })->orWhere(function ($query) use ($conv) {
-                $query->where('sender_id', $conv->participant_id)
-                      ->where('receiver_id', Auth::id());
-            })->latest('created_at')->first();
+            $unreadCount = Message::where('sender_id', $participantId)
+                ->where('receiver_id', Auth::id())
+                ->where('read', false)
+                ->count();
 
             $chats->push([
                 'user' => $participant,
-                'lastMessage' => $lastMessage,
-                'unreadCount' => Message::where('sender_id', $conv->participant_id)
-                    ->where('receiver_id', Auth::id())
-                    ->where('read', false)
-                    ->count()
+                'lastMessage' => $lastMsg,
+                'unreadCount' => $unreadCount
             ]);
         }
 
