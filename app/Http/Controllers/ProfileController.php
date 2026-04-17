@@ -71,8 +71,7 @@ class ProfileController extends Controller
 
     public function info(User $user): View
     {
-        $profile = Cache::tags(["user:{$user->id}"])->remember(
-            "user.info.{$user->id}",
+        $profile = Cache::remember(
             now()->addMinutes(10),
             fn () => $user->load([
                 'sendFriend',
