@@ -15,7 +15,23 @@ class ChatController extends Controller
 {
     public function index(int $receiverId): View
     {
-        return view('chat', ['receiverId' => $receiverId]);
+        // Provjeri da receiver postoji
+        $receiver = User::findOrFail($receiverId);
+
+        // Dohvati sve poruke između dva korisnika
+        $messages = Message::where(function ($query) use ($receiverId) {
+            $query->where('sender_id', Auth::id())
+                  ->where('receiver_id', $receiverId);
+        })->orWhere(function ($query) use ($receiverId) {
+            $query->where('sender_id', $receiverId)
+                  ->where('receiver_id', Auth::id());
+        })->orderBy('created_at', 'asc')->get();
+
+        return view('chat', [
+            'receiverId' => $receiverId,
+            'receiver' => $receiver,
+            'messages' => $messages
+        ]);
     }
 
     public function sendMessage(MessageRequest $request): JsonResponse

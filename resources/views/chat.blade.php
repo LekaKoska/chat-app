@@ -22,7 +22,16 @@
             </div>
 
             <div id="chat-box" class="h-80 overflow-y-auto p-4 space-y-3 bg-gray-50 dark:bg-gray-900">
-                <p id="no-messages" class="text-center text-gray-400">No message</p>
+                @forelse($messages ?? [] as $message)
+                    <div class="flex {{ $message->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
+                        <div class="max-w-[75%] {{ $message->sender_id === auth()->id() ? 'bg-indigo-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100' }} px-4 py-2 rounded-xl rounded-{{ $message->sender_id === auth()->id() ? 'br' : 'bl' }}-none">
+                            <p class="text-sm">{{ $message->message }}</p>
+                            <p class="text-xs {{ $message->sender_id === auth()->id() ? 'text-indigo-100' : 'text-gray-500 dark:text-gray-400' }} mt-1">{{ $message->created_at->format('H:i') }}</p>
+                        </div>
+                    </div>
+                @empty
+                    <p id="no-messages" class="text-center text-gray-400">No messages yet. Start a conversation!</p>
+                @endforelse
             </div>
 
             @if(!empty($receiverId) && $receiverId !== auth()->id())
@@ -62,12 +71,35 @@
         window.auth = {user: {id: {{ auth()->id() }}}};
         const receiverId = document.getElementById('receiver-id')?.value;
         const chatBox = document.getElementById('chat-box');
-
+        const currentUserId = {{ auth()->id() }};
 
         function scrollToBottom() {
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
+        function addMessageToChat(msgData, isSent = true) {
+            const div = document.createElement('div');
+            div.classList.add('flex', isSent ? 'justify-end' : 'justify-start');
+
+            const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+            const msgClass = isSent
+                ? 'bg-indigo-600 text-white rounded-br-none'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-bl-none';
+            const timeClass = isSent ? 'text-indigo-100' : 'text-gray-500 dark:text-gray-400';
+
+            div.innerHTML = `
+                <div class="max-w-[75%] ${msgClass} px-4 py-2 rounded-xl">
+                    <p class="text-sm">${msgData.message || msgData.text || msgData}</p>
+                    <p class="text-xs ${timeClass} mt-1">${time}</p>
+                </div>
+            `;
+
+            chatBox.appendChild(div);
+            document.getElementById('no-messages')?.remove();
+            scrollToBottom();
+        }
+
+        // Slušaj na form submit
         document.getElementById('chat-form')?.addEventListener('submit', async function (e) {
             e.preventDefault();
             const form = e.target;
@@ -80,20 +112,26 @@
             });
 
             const msg = await res.json();
-
-            const div = document.createElement('div');
-            div.classList.add('flex', 'justify-end');
-            div.innerHTML = `
-                <div class="max-w-[75%] bg-indigo-600 text-white px-4 py-2 rounded-xl rounded-br-none shadow">
-                    ${msg.message}
-                </div>
-            `;
-            chatBox.appendChild(div);
-
-            document.getElementById('no-messages')?.remove();
-
+            addMessageToChat(msg, true);
             form.reset();
-            scrollToBottom();
         });
+
+        // Slušaj na primljene poruke preko Echo
+        if (window.Echo && receiverId) {
+            const senderId = currentUserId;
+            const channelId = 'chat.' + Math.min(senderId, parseInt(receiverId)) + '.' + Math.max(senderId, parseInt(receiverId));
+
+            window.Echo.private(channelId)
+                .listen('MessageSent', (e) => {
+                    // Prikaži primljenu poruku samo ako nije od mene
+                    if (e.message.sender_id !== currentUserId) {
+                        console.log('Received message:', e.message);
+                        addMessageToChat(e.message, false);
+                    }
+                });
+        }
+
+        // Osvježi stranicu na početku
+        document.addEventListener('DOMContentLoaded', scrollToBottom);
     </script>
 </x-app-layout>

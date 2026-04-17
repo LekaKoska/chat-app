@@ -22,8 +22,15 @@ class MessageSent implements ShouldBroadcast
 
     public function broadcastOn(): array
     {
+        // Kreiraj kanal za oba korisnika (sender i receiver)
+        $senderId = $this->message->sender_id;
+        $receiverId = $this->message->receiver_id;
+
+        // Koristi istu vrijednost kanala za oba korisnika da budu na istom kanalu
+        $channelId = 'chat.' . min($senderId, $receiverId) . '.' . max($senderId, $receiverId);
+
         return [
-            new PrivateChannel(name: 'chat.' . $this->message->receiver_id),
+            new PrivateChannel($channelId),
         ];
     }
 }
