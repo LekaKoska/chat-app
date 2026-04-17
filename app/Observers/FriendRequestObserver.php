@@ -20,7 +20,7 @@ class FriendRequestObserver
     }
     public function updated(FriendConnectionModel $friendRequest): void
     {
-        Cache::tags(["user:$friendRequest->receiver_id"])->flush();
+        Cache::flush();
         if ($friendRequest->wasChanged('status') && $friendRequest->status === FriendStatus::Accepted) {
             $sender = $friendRequest->sender;
             $accepter = $friendRequest->receiver;

@@ -16,7 +16,7 @@ class FriendConnectionController extends Controller
     public function all(): View
     {
 
-        $friends = Cache::tags(['all_friends'])->remember('friends_list', now()->addMinutes(10), fn() => FriendConnectionModel::where(function ($query) {
+        $friends = Cache::remember('friends_list', now()->addMinutes(10), fn() => FriendConnectionModel::where(function ($query) {
             $userId = auth()->id();
             $query->where('sender_id', $userId)
                 ->orWhere('receiver_id', $userId);
@@ -90,7 +90,7 @@ class FriendConnectionController extends Controller
         }
 
         $friendship->update(['status' => $action]);
-        Cache::tags(['all_friends'])->flush();
+        Cache::flush();
         return redirect()->back()->with(key: 'success', value: 'Friend request is successfully confirmed!');
     }
 

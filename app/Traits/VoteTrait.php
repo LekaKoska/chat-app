@@ -27,6 +27,6 @@ trait VoteTrait
         ],
             ['vote' => $value]
         );
-        Cache::tags(['posts'])->flush();
+        Cache::flush();
     }
 }

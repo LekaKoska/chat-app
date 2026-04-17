@@ -10,7 +10,7 @@ class CommentObserver
 {
     public function created(Comment $comment): void
     {
-        Cache::tags(["post:{$comment->post_id}"])->flush();
+        Cache::flush();
         $postOwner = $comment->posts->ownerOfPost;
 
         if ($postOwner->id !== $comment->user_id) {

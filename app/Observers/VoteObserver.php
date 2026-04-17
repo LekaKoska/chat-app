@@ -19,7 +19,7 @@ class VoteObserver
 
     public function created(Vote $vote): void
     {
-        Cache::tags(['posts'])->flush();
+        Cache::flush();
         $this->notifyPostOwner($vote);
     }
 
