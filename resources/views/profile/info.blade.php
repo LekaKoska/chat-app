@@ -36,11 +36,11 @@
             @unless($user->id === Auth::id())
                 <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
                     @php
-                        $pendingRequest = Auth::user()->sendFriend()->where('receiver_id', $user->id)->first();
-                        $acceptedFriend = Auth::user()->recieveFriend()->where('friend_id', $user->id)->first();
+                        $isFriend = Auth::user()->friends->contains('id', $user->id);
+                        $pendingRequest = Auth::user()->sendFriend()->where('receiver_id', $user->id)->where('pivot.status', 'pending')->first();
                     @endphp
 
-                    @if(!$acceptedFriend)
+                    @if(!$isFriend)
                         @if($pendingRequest)
                             <button disabled
                                     class="inline-flex items-center justify-center bg-gray-400 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md cursor-not-allowed">
