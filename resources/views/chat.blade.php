@@ -99,7 +99,6 @@
             scrollToBottom();
         }
 
-        // Slušaj na form submit
         document.getElementById('chat-form')?.addEventListener('submit', async function (e) {
             e.preventDefault();
             const form = e.target;
@@ -116,14 +115,12 @@
             form.reset();
         });
 
-        // Slušaj na primljene poruke preko Echo
         if (window.Echo && receiverId) {
             const senderId = currentUserId;
             const channelId = 'chat.' + Math.min(senderId, parseInt(receiverId)) + '.' + Math.max(senderId, parseInt(receiverId));
 
             window.Echo.private(channelId)
                 .listen('MessageSent', (e) => {
-                    // Prikaži primljenu poruku samo ako nije od mene
                     if (e.message.sender_id !== currentUserId) {
                         console.log('Received message:', e.message);
                         addMessageToChat(e.message, false);
@@ -131,7 +128,6 @@
                 });
         }
 
-        // Osvježi stranicu na početku
         document.addEventListener('DOMContentLoaded', scrollToBottom);
     </script>
 </x-app-layout>

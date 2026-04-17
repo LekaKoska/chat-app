@@ -15,10 +15,10 @@ class ChatController extends Controller
 {
     public function index(int $receiverId): View
     {
-        // Provjeri da receiver postoji
+
         $receiver = User::findOrFail($receiverId);
 
-        // Dohvati sve poruke između dva korisnika
+
         $messages = Message::where(function ($query) use ($receiverId) {
             $query->where('sender_id', Auth::id())
                   ->where('receiver_id', $receiverId);
@@ -48,7 +48,7 @@ class ChatController extends Controller
 
     public function conversations(): View
     {
-        // Dohvati sve poruke gdje je korisnik učesnik
+
         $messages = Message::where(function ($query) {
             $query->where('sender_id', Auth::id())
                   ->orWhere('receiver_id', Auth::id());
@@ -56,7 +56,6 @@ class ChatController extends Controller
         ->latest('created_at')
         ->get();
 
-        // Grupiraj po participant_id u PHP-u
         $participantMap = [];
         foreach ($messages as $msg) {
             $participantId = $msg->sender_id === Auth::id() ? $msg->receiver_id : $msg->sender_id;
@@ -66,12 +65,10 @@ class ChatController extends Controller
             }
         }
 
-        // Sortiraj po zadnjoj poruci (newest first)
         usort($participantMap, function ($a, $b) {
             return $b->created_at->timestamp - $a->created_at->timestamp;
         });
 
-        // Kreira array sa svim potrebnim podacima
         $chats = collect([]);
         foreach ($participantMap as $participantId => $lastMsg) {
             $participant = User::find($participantId);
