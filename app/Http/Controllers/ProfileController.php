@@ -72,6 +72,7 @@ class ProfileController extends Controller
     public function info(User $user): View
     {
         $profile = Cache::remember(
+            "user_profile_{$user->id}",
             now()->addMinutes(10),
             fn () => $user->load([
                 'sendFriend',
