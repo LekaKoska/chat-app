@@ -1,14 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit Comment</title>
-    @vite('resources/css/app.css')
-</head>
-<body class="bg-gray-100 dark:bg-gray-900 min-h-screen py-8">
-
-<div class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6">
+<x-app-layout>
+    <div class="max-w-md mx-auto px-4 py-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6">
     <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Edit Your Comment</h1>
 
     <form action="{{ route('comments.update', $comment->id) }}" method="POST" class="space-y-4">
@@ -45,8 +37,6 @@
             </button>
         </div>
     </form>
-
-</div>
-
-</body>
-</html>
+        </div>
+    </div>
+</x-app-layout>

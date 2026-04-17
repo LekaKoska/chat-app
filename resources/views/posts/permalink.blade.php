@@ -10,7 +10,13 @@
     <body class="bg-gray-100 dark:bg-gray-900 min-h-screen py-8">
 
     <div class="max-w-2xl mx-auto px-4 space-y-6">
-
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Post Details</h1>
+            <a href="{{ route('posts.index') }}"
+               class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+                ← Back to Feed
+            </a>
+        </div>
 
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-2xl p-5 transition hover:shadow-md">
             <div class="flex items-start gap-4">

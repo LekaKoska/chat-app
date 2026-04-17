@@ -1,105 +1,51 @@
 @php use App\Enums\FriendStatus; @endphp
-    <!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incoming Friend Requests</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f3f4f6;
-            padding: 30px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .requests-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .request-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .user-info {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .actions form {
-            display: inline;
-        }
-
-        button {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-left: 5px;
-        }
-
-        .accept {
-            background-color: #22c55e;
-            color: white;
-        }
-
-        .reject {
-            background-color: #ef4444;
-            color: white;
-        }
-
-        .empty {
-            text-align: center;
-            color: #888;
-        }
-    </style>
-</head>
-<body>
-
-<h1>Incoming Friend Requests</h1>
-
-<div class="requests-container">
-    @forelse($receiver as $request)
-        <div class="request-card">
-            <div class="user-info">
-                {{ $request->sender->name }} sent you a friend request
-            </div>
-
-            <div class="actions">
-                <form
-                    action="{{ route('friends.request.respond', [$request->id, 'action' => FriendStatus::Accepted->value]) }}"
-                    method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" class="accept" value="{{FriendStatus::Accepted->value}}">Accept</button>
-                </form>
-                <form
-                    action="{{ route('friends.request.respond', [$request->id, 'action' => FriendStatus::Declined->value]) }}"
-                    method="POST">
-                    @csrf
-                    @method("PATCH")
-                    <button type="submit" class="declined" value="{{FriendStatus::Declined->value}}">Declined</button>
-                </form>
-            </div>
+<x-app-layout>
+    <div class="max-w-2xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">📨 Incoming Friend Requests</h1>
+            <a href="{{ route('friends.request.show') }}"
+               class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+                ➕ Add Friends
+            </a>
         </div>
-    @empty
-        <p class="empty">You have no pending friend requests.</p>
-    @endforelse
-</div>
 
-</body>
-</html>
+        <div class="space-y-4">
+            @forelse($receiver as $request)
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 flex items-center justify-between hover:shadow-md transition">
+                    <div class="flex items-center gap-4">
+                        <img src="{{ asset('storage/images/avatars/' . $request->sender->avatar) }}"
+                             alt="{{ $request->sender->name }}"
+                             class="w-12 h-12 rounded-full object-cover border border-gray-300">
+                        <div>
+                            <p class="font-semibold text-gray-800 dark:text-gray-100">{{ $request->sender->name }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">sent you a friend request</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <form
+                            action="{{ route('friends.request.respond', [$request->id, 'action' => FriendStatus::Accepted->value]) }}"
+                            method="POST"
+                            class="inline">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition">Accept</button>
+                        </form>
+                        <form
+                            action="{{ route('friends.request.respond', [$request->id, 'action' => FriendStatus::Declined->value]) }}"
+                            method="POST"
+                            class="inline">
+                            @csrf
+                            @method("PATCH")
+                            <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition">Decline</button>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 text-center">
+                    <p class="text-gray-500 dark:text-gray-400">You have no pending friend requests. <a href="{{ route('friends.request.show') }}" class="text-indigo-600 hover:underline">Find friends to add?</a></p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</x-app-layout>

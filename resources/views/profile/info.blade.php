@@ -35,6 +35,31 @@
             </div>
             @unless($user->id === Auth::id())
                 <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                    @php
+                        $pendingRequest = Auth::user()->sentFriendRequests()->where('receiver_id', $user->id)->first();
+                        $acceptedFriend = Auth::user()->friends()->where('friend_id', $user->id)->first();
+                    @endphp
+
+                    @if(!$acceptedFriend)
+                        @if($pendingRequest)
+                            <button disabled
+                                    class="inline-flex items-center justify-center bg-gray-400 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md cursor-not-allowed">
+                                ⏳ Request Pending
+                            </button>
+                        @else
+                            <form action="{{ route('friends.request.send', ['receiverId' => $user->id]) }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                        class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md transition transform hover:scale-105">
+                                    👤 Add Friend
+                                </button>
+                            </form>
+                        @endif
+                    @else
+                        <span class="inline-flex items-center justify-center bg-green-600 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md">
+                            ✓ Friends
+                        </span>
+                    @endif
 
                     <a href="{{ route('chat.form', ['receiverId' => $user->id]) }}"
                        class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md transition transform hover:scale-105">

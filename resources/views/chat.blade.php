@@ -1,6 +1,13 @@
 @php@endphp
 <x-app-layout>
-    <div class="max-w-2xl mx-auto p-6">
+    <div class="max-w-2xl mx-auto px-4 py-6">
+        <div class="mb-6 flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">💬 Messages</h1>
+            <a href="{{ route('posts.index') }}"
+               class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+                ← Back
+            </a>
+        </div>
         <div
             class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
 

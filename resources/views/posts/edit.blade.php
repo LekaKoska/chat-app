@@ -1,17 +1,14 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit Post</title>
-    @vite('resources/css/app.css')
-</head>
-<body class="bg-gray-100 dark:bg-gray-900 min-h-screen py-8">
-
-<div class="max-w-2xl mx-auto px-4 space-y-6">
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">
-        Edit Your Post
-    </h1>
+<x-app-layout>
+    <div class="max-w-2xl mx-auto px-4 py-8 space-y-6">
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                Edit Your Post
+            </h1>
+            <a href="{{ route('posts.show', $post->id) }}"
+               class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+                ← Back
+            </a>
+        </div>
 
     <div class="bg-white dark:bg-gray-800 shadow-sm rounded-2xl p-5 transition hover:shadow-md">
         <div class="flex items-start gap-4">
@@ -64,7 +61,4 @@
 
         </div>
     </div>
-</div>
-
-</body>
-</html>
+</x-app-layout>
