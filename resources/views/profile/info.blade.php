@@ -37,7 +37,7 @@
                 <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
                     @php
                         $isFriend = Auth::user()->friends->contains('id', $user->id);
-                        $pendingRequest = Auth::user()->sendFriend()->where('receiver_id', $user->id)->where('pivot.status', 'pending')->first();
+                        $pendingRequest = Auth::user()->sendFriend()->where('receiver_id', $user->id)->wherePivot('status', 'pending')->exists();
                     @endphp
 
                     @if(!$isFriend)
