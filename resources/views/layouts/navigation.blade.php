@@ -121,6 +121,12 @@
                          @click.outside="open = false"
                          x-transition
                          class="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 z-50">
+                        <div class="p-2 border-b border-gray-200 dark:border-gray-700">
+                            <a href="{{ route('chat.conversations') }}"
+                               class="block px-4 py-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition">
+                                📬 View All Chats
+                            </a>
+                        </div>
                         <div class="max-h-96 overflow-y-auto" id="message-list">
                             <div id="message-empty" class="p-4 text-sm text-gray-500 dark:text-gray-400">No messages
                                 yet.

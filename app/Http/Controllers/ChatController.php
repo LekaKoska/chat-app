@@ -45,4 +45,43 @@ class ChatController extends Controller
         $receiver->notify(new NewMessage($message));
         return response()->json($message);
     }
+
+    public function conversations(): View
+    {
+        // Dohvati sve konverzacije za trenutnog korisnika
+        $conversations = Message::where(function ($query) {
+            $query->where('sender_id', Auth::id())
+                  ->orWhere('receiver_id', Auth::id());
+        })
+        ->selectRaw('(CASE WHEN sender_id = ? THEN receiver_id ELSE sender_id END) as participant_id', [Auth::id()])
+        ->distinct('participant_id')
+        ->latest('created_at')
+        ->get();
+
+        // Za svaki participant, dohvati podatke i posljednju poruku
+        $chats = collect([]);
+        foreach ($conversations as $conv) {
+            $participant = User::find($conv->participant_id);
+            if (!$participant) continue;
+
+            $lastMessage = Message::where(function ($query) use ($conv) {
+                $query->where('sender_id', Auth::id())
+                      ->where('receiver_id', $conv->participant_id);
+            })->orWhere(function ($query) use ($conv) {
+                $query->where('sender_id', $conv->participant_id)
+                      ->where('receiver_id', Auth::id());
+            })->latest('created_at')->first();
+
+            $chats->push([
+                'user' => $participant,
+                'lastMessage' => $lastMessage,
+                'unreadCount' => Message::where('sender_id', $conv->participant_id)
+                    ->where('receiver_id', Auth::id())
+                    ->where('read', false)
+                    ->count()
+            ]);
+        }
+
+        return view('chat-history', ['chats' => $chats]);
+    }
 }

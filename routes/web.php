@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::controller(ChatController::class)->group(function () {
         Route::post('chat', 'sendMessage')->name('chat');
         Route::get('message/{receiverId}', 'index')->name('chat.form');
+        Route::get('messages', 'conversations')->name('chat.conversations');
     });
 
     Route::get('subscription/{user}', SubscriptionController::class)->name('subscription');
