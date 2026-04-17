@@ -37,7 +37,7 @@
                 <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
                     @php
                         $pendingRequest = Auth::user()->sendFriend()->where('receiver_id', $user->id)->first();
-                        $acceptedFriend = Auth::user()->friends()->where('friend_id', $user->id)->first();
+                        $acceptedFriend = Auth::user()->recieveFriend()->where('friend_id', $user->id)->first();
                     @endphp
 
                     @if(!$acceptedFriend)
