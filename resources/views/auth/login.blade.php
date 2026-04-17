@@ -1,74 +1,85 @@
 @php use App\Enums\Socialite\ProvidersEnum; @endphp
 <x-guest-layout>
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')"/>
+    <x-auth-session-status class="mb-6" :status="session('status')"/>
 
-    <form method="POST" action="{{ route('login') }}">
+    <!-- Title -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back! 👋</h2>
+        <p class="text-gray-600 dark:text-gray-400">Sign in to your account to continue</p>
+    </div>
+
+    <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
 
         <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Email')"/>
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
+            <x-input-label for="email" :value="__('📧 Email Address')"/>
+            <x-text-input id="email" class="block mt-2 w-full" type="email" name="email" :value="old('email')" required
                           autofocus autocomplete="username"/>
             <x-input-error :messages="$errors->get('email')" class="mt-2"/>
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')"/>
-
-            <x-text-input id="password" class="block mt-1 w-full"
+        <div>
+            <x-input-label for="password" :value="__('🔐 Password')"/>
+            <x-text-input id="password" class="block mt-2 w-full"
                           type="password"
                           name="password"
                           required autocomplete="current-password"/>
-
             <x-input-error :messages="$errors->get('password')" class="mt-2"/>
         </div>
 
         <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
+        <div class="flex items-center justify-between">
+            <label for="remember_me" class="inline-flex items-center cursor-pointer">
                 <input id="remember_me" type="checkbox"
-                       class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
+                       class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800 transition"
                        name="remember">
                 <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
             </label>
-        </div>
-
-
-
-        <div class="flex items-center justify-end mt-4">
-
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 mr-6"
-               href="{{ route('register') }}">
-                {{ __('Register right now') }}
-            </a>
 
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                <a class="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition"
                    href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                    {{ __('Forgot password?') }}
                 </a>
             @endif
+        </div>
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
+        <!-- Login Button -->
+        <div class="mt-6">
+            <x-primary-button class="w-full justify-center py-3 text-base font-semibold">
+                {{ __('Sign In') }}
             </x-primary-button>
         </div>
-        <div class="flex flex-col items-center justify-center mt-6 space-y-4">
-            <p class="text-gray-500 text-sm">Or continue with</p>
 
-            <div class="flex items-center justify-center gap-3">
-                <a href="{{ route('auth.redirect', ProvidersEnum::Google) }}"
-                   class="p-2 border border-gray-300 rounded-full bg-white hover:bg-gray-100 transition duration-200 shadow-sm">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
-                </a>
+        <!-- Register Link -->
+        <div class="text-center text-sm text-gray-600 dark:text-gray-400">
+            {{ __('Don\'t have an account?') }}
+            <a class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-semibold transition"
+               href="{{ route('register') }}">
+                {{ __('Sign up now') }}
+            </a>
+        </div>
 
+        <!-- Divider -->
+        <div class="relative my-6">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue with</span>
             </div>
         </div>
 
+        <!-- Social Login -->
+        <div class="flex items-center justify-center gap-3">
+            <a href="{{ route('auth.redirect', ProvidersEnum::Google) }}"
+               class="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition duration-200 shadow-sm flex items-center justify-center gap-2">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-4 h-4">
+                <span class="hidden sm:inline text-sm font-medium text-gray-700 dark:text-gray-300">Google</span>
+            </a>
+        </div>
     </form>
-
-
 </x-guest-layout>
