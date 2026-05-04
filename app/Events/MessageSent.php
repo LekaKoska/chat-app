@@ -9,6 +9,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+use Illuminate\Foundation\Bus\Dispatchable;
 class MessageSent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -22,11 +23,8 @@ class MessageSent implements ShouldBroadcast
 
     public function broadcastOn(): array
     {
-        // Kreiraj kanal za oba korisnika (sender i receiver)
         $senderId = $this->message->sender_id;
         $receiverId = $this->message->receiver_id;
-
-        // Koristi istu vrijednost kanala za oba korisnika da budu na istom kanalu
         $channelId = 'chat.' . min($senderId, $receiverId) . '.' . max($senderId, $receiverId);
 
         return [
